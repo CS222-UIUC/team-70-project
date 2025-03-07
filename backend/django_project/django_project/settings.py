@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites",  # django-allauth
+    "allauth",  # django-allauth
+    "allauth.account",  # django-allauth
 ]
 
 MIDDLEWARE = [
@@ -46,8 +49,21 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    "allauth.account.middleware.AccountMiddleware",  # django-allauth
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# django-allauth configurations
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",  # new
+]
+
+SITE_ID = 1 # django-allauth
+
+ACCOUNT_EMAIL_VERIFICATION = "none" # django-allauth (change later when implemented)
+
+LOGIN_REDIRECT_URL = '/' # django-allauth (change later when implemented)
 
 ROOT_URLCONF = 'django_project.urls'
 
