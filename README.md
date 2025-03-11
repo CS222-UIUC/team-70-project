@@ -76,4 +76,4 @@ npx husky init
 ### Jest:
 npm install jest --save-dev
 
-
+npm install --save-dev eslint-plugin-jest
