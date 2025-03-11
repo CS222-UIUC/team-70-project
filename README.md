@@ -16,7 +16,7 @@ python -m venv .venv
 .\.venv\Scripts\activate
 ```
 
-### Install python dependencies using requirements.txt (inside .venv)
+### Install python dependencies using requirements.txt (inside .venv in backend folder)
 ```
 py -m pip install <path to requirements.txt>
 ```
@@ -55,7 +55,7 @@ py -m pip install spacy
 
 Django has built-in support for SQLite by default
 
-## Configuring Node.js Tools in the frontend (separate from .venv)
+## Configuring Node.js Tools in the frontend (in frontend folder separate from .venv)
 * --save-dev flag means that it is a development dependency only
 
 ### React:
@@ -63,6 +63,13 @@ npm install react react-dom
 
 ### ESlint:
 npm install eslint --save-dev
+
+npm init @eslint/config
+
+### Husky:
+Husky is a package for automating eslint for github commits
+
+npm install husky --save-dev
 
 ### Jest:
 npm install jest --save-dev
