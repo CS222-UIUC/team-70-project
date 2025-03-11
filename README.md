@@ -64,7 +64,7 @@ npm install react react-dom
 ### ESlint:
 npm install eslint --save-dev
 
-npm init @eslint/config
+npm init @eslint/config@latest
 
 ### Husky:
 Husky is a package for automating eslint for github commits
