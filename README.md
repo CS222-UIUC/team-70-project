@@ -59,21 +59,29 @@ Django has built-in support for SQLite by default
 * --save-dev flag means that it is a development dependency only
 
 ### React:
+```
 npm install react react-dom
+```
 
 ### ESlint:
+```
 npm install eslint --save-dev
 
 npm init @eslint/config@latest
+```
 
 ### Husky:
 Husky is a package for automating eslint for github commits
 
+```
 npm install husky --save-dev
 
 npx husky init
+```
 
 ### Jest:
+```
 npm install jest --save-dev
 
 npm install --save-dev eslint-plugin-jest
+```
