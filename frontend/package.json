@@ -13,6 +13,6 @@
   },
   "scripts": {
     "lint": "eslint . --fix --max-warnings=0",
-    "prepare": "husky"
+    "prepare": "cd .. && husky frontend/.husky"
   }
 }

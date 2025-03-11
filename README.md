@@ -71,6 +71,8 @@ Husky is a package for automating eslint for github commits
 
 npm install husky --save-dev
 
+npx husky init
+
 ### Jest:
 npm install jest --save-dev
 
