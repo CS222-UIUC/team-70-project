@@ -1,9 +1,60 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import './App.css';
-import Keyboard from './Components/keyboard';
+import './Components/keyboard.css'; 
+import VirtualKeyboard from './Components/keyboard';
 
 function App() {
+  const [inputValue, setInputValue] = useState("");
+  const textInputRef = useRef(null);
+
+  // 
+  useEffect(() => {
+    if (textInputRef.current) {
+      textInputRef.current.focus(); //.focus() sets focus on textboxes
+    }
+  }, []);
+//cases for keypresses
+  const handleKeyPress = (key) => {
+    switch (key) {
+      case "Backspace":
+        setInputValue((prev) => prev.slice(0, -1));
+        break;
+      case "Space":
+        setInputValue((prev) => prev + " ");
+        break;
+      case "Tab":
+        setInputValue((prev) => prev + "\t");
+        break;
+      case "Enter":
+        setInputValue((prev) => prev + "\n");
+        break;
+      case "Caps":
+      case "Shift":
+      case "Ctrl":
+      case "Alt":
+        // These keys don't add text
+        break;
+      default:
+        setInputValue((prev) => prev + key);
+        break;
+    }
+    // Refocus the hidden input after virtual key press
+    if (textInputRef.current) {
+      textInputRef.current.focus();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      setInputValue((prev) => prev + "\t");
+    }
+  };
   
   return (
     <Container>
@@ -17,10 +68,22 @@ function App() {
         </Header>
         
         <ContentArea>
-        <TextContainerWrapper>
+          <TextContainerWrapper onClick={() => textInputRef.current && textInputRef.current.focus()}>
+            <pre>{inputValue}</pre>
+            <textarea
+              ref={textInputRef}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              style={{
+                position: "absolute",
+                opacity: 0,
+                height: 0,
+                width: 0
+              }}
+            />
           </TextContainerWrapper>
 
-          
           <NavBar>
             <NavItems>
               <NavItemBold>Article</NavItemBold>
@@ -54,9 +117,10 @@ function App() {
         
         <Footer>
           <KeyboardWrapper>
-            <Keyboard/>
+            <div className="keyboardcontainer">
+              <VirtualKeyboard onKeyPress={handleKeyPress} />
+            </div>
           </KeyboardWrapper>
-          
         </Footer>
       </MainContent>
       
@@ -80,6 +144,7 @@ const Container = styled.div`
     flex-direction: column;
   }
 `;
+
 const TextContainerWrapper = styled.div`
   width: 100%;
   min-height: 50px;
@@ -87,6 +152,7 @@ const TextContainerWrapper = styled.div`
   overflow: auto;
   border-radius: 4px;
   margin-bottom: 20px;
+  position: relative; /* Added for the absolute positioning of the hidden textarea */
   
   pre {
     text-align: left;
@@ -181,8 +247,6 @@ const ContentArea = styled.div`
   padding: 20px;
   overflow-x: hidden;
 `;
-
-
 
 const NavBar = styled.div`
   position: relative;
@@ -305,23 +369,13 @@ const BlurredImageText = styled.div`
     font-size: 16px;
   }
 `;
+
 const KeyboardWrapper = styled.div`
   width: 100%;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  .keyboard {
-    height: auto;
-    width: 100%;
-    max-width: 1000px;
-  }
-
-  .textcontainer {
-    width: 100%;
-    margin-bottom: 15px;
-  }
 
   .keyboardcontainer {
     width: 100%;
@@ -331,6 +385,7 @@ const KeyboardWrapper = styled.div`
     width: 100%;
   }
 `;
+
 const Footer = styled.div`
   width: 100%;
   padding: 20px;
@@ -339,6 +394,5 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 
 export default App;
