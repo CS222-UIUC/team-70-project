@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Route, Routes,useLocation} from 'react-router-dom';
 import './App.css';
-import './Components/keyboard.css'; 
-import VirtualKeyboard from './Components/keyboard';
+import './Components/Keyboard/keyboard.css'; 
+import ProfilePage from './Components/ProfilePage/ProfilePage.js';
+import VirtualKeyboard from './Components/Keyboard/keyboard.js';
+import NavLink from './Components/NavLink';
+
 
 function App() {
   const [inputValue, setInputValue] = useState("");
@@ -55,8 +59,16 @@ function App() {
       setInputValue((prev) => prev + "\t");
     }
   };
-  
-  return (
+  const RouteObserver = ({ children }) => {
+    const location = useLocation();
+    return (
+      <>
+        <NavLink currentPath={location.pathname} />
+        {children}
+      </>
+    );
+  };
+  const MainAppContent = () => (
     <Container>
       <LeftSidebar>
         <SidebarTitle>Previous Guesses/Scores</SidebarTitle>
@@ -128,6 +140,22 @@ function App() {
         <SidebarTitle>Friend Scores Leaderboard</SidebarTitle>
       </RightSidebar>
     </Container>
+  );
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={
+          <RouteObserver>
+            <MainAppContent />
+          </RouteObserver>
+        } />
+        <Route path="/profile" element={
+          <RouteObserver>
+            <ProfilePage />
+          </RouteObserver>
+        } />
+      </Routes>
+    </Router>
   );
 }
 
