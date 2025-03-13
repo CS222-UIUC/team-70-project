@@ -181,8 +181,6 @@ def save_user_profile(sender, instance, **kwargs):
     if hasattr(instance, 'profile'):
         instance.profile.save()
 
-# 添加到您现有的 models.py 文件末尾
-
 class ArticleCache(models.Model):
     """Cache for Wikipedia articles to reduce API calls"""
     article_id = models.CharField(max_length=255, unique=True)
