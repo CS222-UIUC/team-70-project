@@ -180,3 +180,76 @@ def save_user_profile(sender, instance, **kwargs):
     """Save the UserProfile whenever the User is saved"""
     if hasattr(instance, 'profile'):
         instance.profile.save()
+
+# 添加到您现有的 models.py 文件末尾
+
+class ArticleCache(models.Model):
+    """Cache for Wikipedia articles to reduce API calls"""
+    article_id = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    image_urls = models.JSONField(default=list, blank=True)
+    retrieved_date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Article caches"
+    
+    def __str__(self):
+        return f"{self.title} ({self.article_id})"
+
+
+class DailyArticle(models.Model):
+    """Stores the article selected for each day's game"""
+    date = models.DateField(unique=True)
+    article = models.ForeignKey(ArticleCache, on_delete=models.PROTECT)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date']
+    
+    def __str__(self):
+        return f"Article for {self.date}: {self.article.title}"
+
+
+class GlobalLeaderboard(models.Model):
+    """Daily global leaderboard cache for performance"""
+    date = models.DateField(unique=True)
+    # Store top 100 scores as JSON to avoid excessive joins
+    leaderboard_data = models.JSONField(default=dict)
+    last_updated = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-date']
+    
+    def __str__(self):
+        return f"Leaderboard for {self.date}"
+    
+    def update_leaderboard(self):
+        """Update the leaderboard data from daily scores"""
+        # Get top scores from users who allow showing on leaderboard
+        top_scores = DailyScore.objects.filter(
+            date=self.date,
+            completed=True,
+            user__profile__show_on_leaderboard=True
+        ).select_related('user__profile').order_by('-score')[:100]
+        
+        # Format data for frontend
+        leaderboard = []
+        for rank, score in enumerate(top_scores, 1):
+            leaderboard.append({
+                'rank': rank,
+                'username': score.user.username,
+                'score': score.score,
+                'guesses': score.guesses,
+                'time_taken': score.time_taken,
+            })
+        
+        self.leaderboard_data = {
+            'scores': leaderboard,
+            'total_players': DailyScore.objects.filter(date=self.date).count(),
+            'average_score': DailyScore.objects.filter(
+                date=self.date, 
+                completed=True
+            ).aggregate(avg=models.Avg('score'))['avg'] or 0,
+        }
+        self.save()
