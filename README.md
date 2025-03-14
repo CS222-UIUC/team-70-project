@@ -29,6 +29,10 @@ pip freeze > requirements.txt
 
 To snapshot your requirements and push to git.
 
+## GIT HOOKS: IMPORTANT
+
+Please copy the "pre-commit" script into the .git/hooks directory of your repository to run the automated tests for backend. You may need to provide it with the permissions to run as an executable for your system.
+
 ## Optional to manually configure .venv:
 
 ### Manually install Django in .venv:
