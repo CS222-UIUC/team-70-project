@@ -41,9 +41,17 @@ py -m pip install Django
 py -m pip install django-allauth
 ```
 
-### Manually install Pep8 in .venv:
+### Manually install Pytest:
 ```
-py -m pip install pep8
+py -m pip install pytest
+```
+
+### Manually install Pylint, which lints based on Pep8, in .venv:
+```
+py -m pip install pylint
+```
+```
+py -m pip install pylint-django
 ```
 
 ### Manually install spaCy in .venv:
