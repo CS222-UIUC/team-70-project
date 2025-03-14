@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Run Pylint on the Django project
+echo "RUNNING PYLINT..."
+pylint backend/django_project/django_project || {
+    echo "Pylint check failed. Please fix the issues before committing."
+    exit 1
+}
+
+# Run Pytest
+echo "RUNNING TESTS..."
+pytest backend/django_project/tests || {
+    echo "Tests failed. Please fix the failing tests before committing."
+    exit 1
+}
+
+# If both checks pass, allow the commit
+echo "All checks passed!"
+exit 0
