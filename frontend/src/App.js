@@ -3,16 +3,15 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Route, Routes,useLocation} from 'react-router-dom';
 import './App.css';
 import './Components/Keyboard/keyboard.css'; 
-import ProfilePage from './Components/ProfilePage/ProfilePage.js';
+import {ProfilePage} from './Components/ProfilePage/ProfilePage.js';
 import VirtualKeyboard from './Components/Keyboard/keyboard.js';
 import NavLink from './Components/NavLink';
 
-
-function App() {
+function MainAppContent (){
   const [inputValue, setInputValue] = useState("");
   const textInputRef = useRef(null);
 
-  // 
+  
   useEffect(() => {
     if (textInputRef.current) {
       textInputRef.current.focus(); //.focus() sets focus on textboxes
@@ -59,6 +58,82 @@ function App() {
       setInputValue((prev) => prev + "\t");
     }
   };
+  return (
+  <Container>
+    <LeftSidebar>
+      <SidebarTitle>Previous Guesses/Scores</SidebarTitle>
+    </LeftSidebar>
+
+    <MainContent>
+      <Header>
+        <Title>Wikipedle</Title>
+      </Header>
+      
+      <ContentArea>
+        { <TextContainerWrapper onClick={() => textInputRef.current && textInputRef.current.focus()}>
+          <pre>{inputValue}</pre>
+          <textarea
+            ref={textInputRef}
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            style={{
+              position: "absolute",
+              opacity: 0,
+              height: 0,
+              width: 0
+            }}
+          />
+        </TextContainerWrapper> }
+
+        <NavBar>
+          <NavItems>
+            <NavItemBold>Article</NavItemBold>
+            <NavItemLink>Talk</NavItemLink>
+            <NavSpacer />
+            <NavItemBold>Read</NavItemBold>
+            <NavItemLink>View source</NavItemLink>
+            <NavItemLink>View History</NavItemLink>
+            <NavItemLink>Tools</NavItemLink>
+          </NavItems>
+          <NavLine />
+          <ActiveNavIndicators>
+            <ActiveIndicator style={{ left: '0', width: '40px' }} />
+            <ActiveIndicator style={{ right: '340px', width: '29px' }} />
+          </ActiveNavIndicators>
+          <NavLine />
+        </NavBar>
+        
+        <ContentColumns>
+          <MainArticle>
+            <ScrambledText>Scrambled Introductory Blurb Text</ScrambledText>
+          </MainArticle>
+          
+          <SideArticle>
+            <BlurredImageContainer>
+              <BlurredImageText>Blurred Image</BlurredImageText>
+            </BlurredImageContainer>
+          </SideArticle>
+        </ContentColumns>
+      </ContentArea>
+      
+      <Footer>
+        <KeyboardWrapper>
+          <div className="keyboardcontainer">
+            <VirtualKeyboard onKeyPress={handleKeyPress} />
+          </div>
+        </KeyboardWrapper>
+      </Footer>
+    </MainContent>
+    
+    <RightSidebar>
+      <SidebarTitle>Friend Scores Leaderboard</SidebarTitle>
+    </RightSidebar>
+  </Container>
+)};
+
+function App() {
+
   const RouteObserver = ({ children }) => {
     const location = useLocation();
     return (
@@ -68,92 +143,15 @@ function App() {
       </>
     );
   };
-  const MainAppContent = () => (
-    <Container>
-      <LeftSidebar>
-        <SidebarTitle>Previous Guesses/Scores</SidebarTitle>
-      </LeftSidebar>
-
-      <MainContent>
-        <Header>
-          <Title>Wikipedle</Title>
-        </Header>
-        
-        <ContentArea>
-          <TextContainerWrapper onClick={() => textInputRef.current && textInputRef.current.focus()}>
-            <pre>{inputValue}</pre>
-            <textarea
-              ref={textInputRef}
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              style={{
-                position: "absolute",
-                opacity: 0,
-                height: 0,
-                width: 0
-              }}
-            />
-          </TextContainerWrapper>
-
-          <NavBar>
-            <NavItems>
-              <NavItemBold>Article</NavItemBold>
-              <NavItemLink>Talk</NavItemLink>
-              <NavSpacer />
-              <NavItemBold>Read</NavItemBold>
-              <NavItemLink>View source</NavItemLink>
-              <NavItemLink>View History</NavItemLink>
-              <NavItemLink>Tools</NavItemLink>
-            </NavItems>
-            <NavLine />
-            <ActiveNavIndicators>
-              <ActiveIndicator style={{ left: '0', width: '40px' }} />
-              <ActiveIndicator style={{ right: '340px', width: '29px' }} />
-            </ActiveNavIndicators>
-            <NavLine />
-          </NavBar>
-          
-          <ContentColumns>
-            <MainArticle>
-              <ScrambledText>Scrambled Introductory Blurb Text</ScrambledText>
-            </MainArticle>
-            
-            <SideArticle>
-              <BlurredImageContainer>
-                <BlurredImageText>Blurred Image</BlurredImageText>
-              </BlurredImageContainer>
-            </SideArticle>
-          </ContentColumns>
-        </ContentArea>
-        
-        <Footer>
-          <KeyboardWrapper>
-            <div className="keyboardcontainer">
-              <VirtualKeyboard onKeyPress={handleKeyPress} />
-            </div>
-          </KeyboardWrapper>
-        </Footer>
-      </MainContent>
-      
-      <RightSidebar>
-        <SidebarTitle>Friend Scores Leaderboard</SidebarTitle>
-      </RightSidebar>
-    </Container>
-  );
   return (
     <Router>
       <Routes>
         <Route path="/" element={
-          <RouteObserver>
             <MainAppContent />
-          </RouteObserver>
         } />
-        <Route path="/profile" element={
-          <RouteObserver>
+        { <Route path="/profile" element={
             <ProfilePage />
-          </RouteObserver>
-        } />
+        } /> }
       </Routes>
     </Router>
   );
