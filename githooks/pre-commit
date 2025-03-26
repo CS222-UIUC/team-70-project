@@ -7,12 +7,18 @@ from pathlib import Path
 def run_command(command, cwd=None):
     """Run a command and return whether it succeeded"""
     try:
-        subprocess.run(command, check=True, cwd=cwd, shell=True,
-                      stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                      text=True)
+        result = subprocess.run(command, check=True, cwd=cwd, shell=True,
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              text=True)
+        # Print stdout even on success in case there are important messages
+        if result.stdout:
+            print(result.stdout)
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Command failed: {command}")
+        print(f"\nCommand failed: {command}")
+        print("\nStandard Output:")
+        print(e.stdout)
+        print("\nError Output:")
         print(e.stderr)
         return False
 
