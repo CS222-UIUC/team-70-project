@@ -6,6 +6,8 @@ import './Components/Keyboard/keyboard.css';
 import {ProfilePage} from './Components/ProfilePage/ProfilePage.js';
 import VirtualKeyboard from './Components/Keyboard/keyboard.js';
 import NavLink from './Components/NavLink';
+import Login from './Components/Login/Login.js';
+import Signup from './Components/Signup/Signup.js';
 
 function MainAppContent (){
   const [inputValue, setInputValue] = useState("");
@@ -148,6 +150,12 @@ function App() {
       <Routes>
         <Route path="/" element={
             <MainAppContent />
+        } />
+        <Route path="/login" element={
+            <Login />
+        } />
+        <Route path="/signup" element={
+            <Signup />
         } />
         { <Route path="/profile" element={
             <ProfilePage />
