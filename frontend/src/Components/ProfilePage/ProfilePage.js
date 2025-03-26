@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// eslint-disable-next-line no-unused-vars
-import Avatar from '@sabfry/avatarium';
-// eslint-disable-next-line no-unused-vars
-import { Formik, Form, Field } from 'formik';
 import './ProfilePage.css';
 export function ProfilePage() {
     
