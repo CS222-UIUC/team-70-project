@@ -82,15 +82,6 @@ npm install eslint --save-dev
 npm init @eslint/config@latest
 ```
 
-### Husky:
-Husky is a package for automating eslint for github commits
-
-```
-npm install husky --save-dev
-
-npx husky init
-```
-
 ### Jest:
 ```
 npm install jest --save-dev

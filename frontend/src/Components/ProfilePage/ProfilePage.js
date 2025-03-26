@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Avatar from '@sabfry/avatarium';
-import { Formik, Form, Field } from 'formik';
 import './ProfilePage.css';
 export function ProfilePage() {
     

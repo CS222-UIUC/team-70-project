@@ -1,19 +1,75 @@
-#!/bin/sh
+#!/usr/bin/env python3
 
-# Run Pylint on the Django project
-echo "RUNNING PYLINT..."
-pylint backend/django_project/django_project || {
-    echo "Pylint check failed. Please fix the issues before committing."
-    exit 1
-}
+import subprocess
+import sys
+from pathlib import Path
 
-# Run Pytest
-echo "RUNNING TESTS..."
-pytest backend/django_project/tests || {
-    echo "Tests failed. Please fix the failing tests before committing."
-    exit 1
-}
+def run_command(command, cwd=None):
+    """Run a command and return whether it succeeded"""
+    try:
+        result = subprocess.run(command, check=True, cwd=cwd, shell=True,
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              text=True)
+        # Print stdout even on success in case there are important messages
+        if result.stdout:
+            print(result.stdout)
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"\nCommand failed: {command}")
+        print("\nStandard Output:")
+        print(e.stdout)
+        print("\nError Output:")
+        print(e.stderr)
+        return False
 
-# If both checks pass, allow the commit
-echo "All checks passed!"
-exit 0
+def get_staged_files():
+    """Get list of files staged for commit"""
+    result = subprocess.run(['git', 'diff', '--cached', '--name-only'],
+                          capture_output=True, text=True)
+    return result.stdout.splitlines()
+
+def main():
+    # Get staged files
+    staged_files = get_staged_files()
+    
+    # Check which directories have changes
+    backend_changes = any(f.startswith('backend/') for f in staged_files)
+    frontend_changes = any(f.startswith('frontend/') for f in staged_files)
+    
+    # Track if all checks pass
+    all_checks_passed = True
+    
+    # Run backend checks if needed
+    if backend_changes:
+        print("RUNNING PYLINT ON BACKEND...")
+        if not run_command("pylint backend/django_project/django_project"):
+            print("Pylint check failed. Please fix the issues before committing.")
+            all_checks_passed = False
+        
+        print("\nRUNNING PYTESTS ON BACKEND...")
+        if not run_command("pytest backend/django_project/tests"):
+            print("Tests failed. Please fix the failing tests before committing.")
+            all_checks_passed = False
+    
+    # Run frontend checks if needed
+    if frontend_changes:
+        frontend_dir = Path('frontend')
+        
+        print("\nRUNNING ESLINT ON FRONTEND...")
+        if not run_command("npm run lint", cwd=frontend_dir):
+            print("ESLint check failed. Please fix the issues before committing.")
+            all_checks_passed = False
+        
+        print("\nRUNNING JEST TESTS ON FRONTEND...")
+        if not run_command("npm run jest", cwd=frontend_dir):
+            print("Jest tests failed. Please fix the failing tests before committing.")
+            all_checks_passed = False
+    
+    if all_checks_passed:
+        print("\nAll checks passed!")
+        sys.exit(0)
+    else:
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
