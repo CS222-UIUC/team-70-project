@@ -6,6 +6,8 @@ import jest from "eslint-plugin-jest";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  pluginJs.configs.recommended,    // Recommended ESLint config for JS
+  pluginReact.configs.flat.recommended, // Recommended ESLint config for React
   {
     settings: {
       react: {
@@ -18,6 +20,9 @@ export default [
   },
   {
     files: ["**/*.{js,mjs,cjs,jsx}"], // Apply to JavaScript and JSX files
+    rules: {
+      "react/prop-types" : "off"
+    }
   },
   {
     languageOptions: {
@@ -27,7 +32,5 @@ export default [
         ...globals.jest,    // Jest globals (test, expect, etc.)
       },
     },
-  },
-  pluginJs.configs.recommended,    // Recommended ESLint config for JS
-  pluginReact.configs.flat.recommended, // Recommended ESLint config for React
+  }
 ];

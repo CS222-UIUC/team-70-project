@@ -133,7 +133,7 @@ function MainAppContent (){
 )};
 
 function App() {
-
+  // eslint-disable-next-line no-unused-vars
   const RouteObserver = ({ children }) => {
     const location = useLocation();
     return (
