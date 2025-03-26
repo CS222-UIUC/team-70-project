@@ -24,8 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --fix --max-warnings=0",
-    "prepare": "cd .. && husky frontend/.husky",
-    "test": "jest"
+    "jest": "jest"
   },
   "eslintConfig": {
     "extends": [
@@ -43,7 +42,7 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
+    ],
 
     "@eslint/js": "^9.22.0",
     "@types/jest": "^29.5.14",
@@ -51,7 +50,6 @@
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^16.0.0",
-    "husky": "^9.1.7",
     "jest": "^29.7.0"
   }
 }

@@ -1,4 +1,0 @@
-cd frontend
-# PLACE ALL TESTING/LINTING SCRIPTS HERE:
-npm run lint
-npm run test
