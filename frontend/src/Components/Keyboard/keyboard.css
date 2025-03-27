@@ -52,8 +52,9 @@
 
 .key {
     display: flex;
-    width: 45px;
-    height: 45px;
+    flex: 1 0 40px;
+    width: 40px;
+    height: 40px;
     margin: 3px;
     justify-content: center;
     flex-direction: column;
@@ -72,25 +73,25 @@
 }
 
 .row:first-child .key:first-child{
-    width: 30px;
+    flex: 1 0 40px;
 }
 
 .row:first-child .key:last-child{
-    width: 60px;
+    flex: 1 0 60px;
 }
 
 .row:nth-child(3) .key:first-child{
-    width: 70px;
+    flex: 1 0 70px;
 }
 .row:nth-child(3) .key:last-child{
-    width: 70px;
+    flex: 1 0 70px;
 }
 .row:nth-child(4) .key:first-child{
-    width: 100px;
+    flex: 1 0 100px;
 }
 .row:nth-child(4) .key:last-child{
-    width: 100px;
+    flex: 1 0 100px;
 }
 .row:nth-child(5) .key:nth-child(3){
-    width: 400px;
+    flex: 1 0 400px;
 }
