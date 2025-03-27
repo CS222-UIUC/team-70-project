@@ -23,7 +23,7 @@
 }
 
 .nav-link {
-    text-decoration: none;
+    text-decoration: underline;
     color: #36c;
     font-size: 16px;
 }
