@@ -1,0 +1,173 @@
+.index-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    text-align: center;
+}
+
+.header {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0px auto;
+    padding: 10px 2.75rem;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-family: 'Gideon Roman', serif;
+    font-weight: 400;
+    font-size: 40px;
+    color: #000000;
+    text-align: start;
+}
+
+.game-container {
+    display: flex;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    flex: 1;
+    background: #FFFFFF;
+}
+
+.left-sidebar {
+    width: 250px;  /* Fixed width */
+    flex-shrink: 0;  /* Prevent sidebar from shrinking */
+    background: #ffffff;
+    padding: 20px 10px;
+}
+
+.right-sidebar {
+    width: 250px;  /* Fixed width */
+    flex-shrink: 0;  /* Prevent sidebar from shrinking */
+    background: #ffffff;
+    padding: 20px 10px;
+}
+
+.content {
+    flex: 1;  /* Take up all remaining space */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;  /* Allow content to shrink below its natural width */
+    padding: 20px;
+}
+
+.input-container-wrapper {
+    width: 100%;
+    min-height: 53px;
+    height: auto;
+    border: 1px solid rgba(0,0,0,0.25);
+    overflow: visible;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.input-container-wrapper pre {
+    text-align: left;
+    display: block;
+    width: calc(100% - 28px);
+    height: calc(100% - 28px);
+    margin: 0;
+    padding: 14px;
+    font-size: 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.hidden-textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    height: 1px;  /* Give it minimal height */
+    width: 1px;   /* Give it minimal width */
+    pointer-events: none;  /* Prevent it from interfering with clicks */
+    overflow: hidden;  /* Hide any overflow */
+}
+
+.article-display {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.article-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #484848;
+    margin: 3px 0;
+}
+
+.footer {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 10px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.keyboard-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    max-height: 30vh;
+    overflow: hidden;
+}
+
+.keyboard-wrapper div {
+    width: 100%; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .left-sidebar, .right-sidebar {
+      width: 200px;
+    }
+  }
+  
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header,
+    .game-container,
+    .footer {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .game-container {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .left-sidebar, .right-sidebar {
+        width: 100%;
+        flex-shrink: unset;
+    }
+
+    .content {
+        order: 1;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .article-display {
+        flex: 1;
+        min-height: 0; /* Allow content to shrink */
+    }
+}
