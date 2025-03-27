@@ -61,7 +61,10 @@ function IndexPage() {
 
             <div className = "game-container">
                 <div className = "left-sidebar">
-                    <h3>Previous Guesses Scoreboard</h3>
+                    <div className = "scoreboard-title-wrapper">
+                        <h3>Past Guess Scoreboard</h3>
+                    </div>
+                    <div className="divider"></div>
                 </div>
 
                 <div className = "content">
@@ -78,12 +81,15 @@ function IndexPage() {
 
                     <div className = "article-display">
                         <h3>Article Display Area</h3>
-                        <div className="article-divider"></div>
+                        <div className="divider"></div>
                     </div>
                 </div>
 
                 <div className = "right-sidebar">
-                    <h3>Friend Guesses Scoreboard</h3>
+                    <div className = "scoreboard-title-wrapper">
+                        <h3>Friend Scoreboard</h3>
+                    </div>
+                    <div className="divider"></div>
                 </div>
             </div>
 
