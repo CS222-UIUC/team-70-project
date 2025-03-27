@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './IndexPage.css';
-import '../Keyboard/keyboard.css'; 
+import ArticleDisplay from '../ArticleDisplay/ArticleDisplay';
 import VirtualKeyboard from '../Keyboard/keyboard.js';
 
 function IndexPage() {
@@ -93,6 +93,8 @@ function IndexPage() {
                             </div>
                         </div>
                         <div className="divider"></div>
+                        <p className="blurb">From Wikipedia, the free encyclopedia</p>
+                        <ArticleDisplay articleData={{ "main-text" : null }}/>
                     </div>
                 </div>
 

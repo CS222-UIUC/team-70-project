@@ -81,6 +81,7 @@ h3 {
     flex-direction: column;
     min-width: 0;  /* Allow content to shrink below its natural width */
     padding: 20px;
+    padding-bottom: 0px;
 }
 
 .input-container-wrapper {
@@ -121,8 +122,21 @@ h3 {
 }
 
 .article-display-wrapper {
-    flex: 1;
-    overflow-y: auto;
+    flex: 1;                     /* Allow it to grow and take available space */
+    max-height: 52.5vh;           /* Set a maximum height (60% of the viewport height) */
+    overflow-y: hidden;            /* Allow vertical scrolling if content exceeds max height */
+    position: relative;          /* Position relative for the pseudo-element */
+}
+
+.article-display-wrapper::after {
+    content: '';                 /* Required for pseudo-element */
+    position: absolute;          /* Position it absolutely */
+    bottom: 0;                  /* Align to the bottom */
+    left: 0;                    /* Align to the left */
+    right: 0;                   /* Align to the right */
+    height: 150px;               /* Height of the fade effect */
+    background: linear-gradient(to bottom, transparent, white); /* Fading effect */
+    pointer-events: none;       /* Allow clicks to pass through */
 }
 
 .fake-navbar {
@@ -164,6 +178,12 @@ h3 {
 .right-items p:first-child {
     border-bottom: 3px solid black; /* Thicker bottom border */
     padding-bottom: 3px;             /* Optional: Add space below the text */
+}
+
+.blurb {
+    font-size: 0.875rem;
+    padding-top: 8px;
+    padding-bottom: 16px;
 }
 
 .footer {
