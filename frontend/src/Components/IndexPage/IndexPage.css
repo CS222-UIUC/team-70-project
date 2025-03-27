@@ -21,25 +21,6 @@ h3 {
     margin: 3px 0;
 }
 
-.header {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0px auto;
-    padding: 10px 2.75rem;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.title {
-    font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif Pro', serif;
-    font-weight: 400;
-    font-size: 40px;
-    color: #000000;
-    text-align: start;
-}
-
 .game-container {
     display: flex;
     width: 100%;
@@ -144,12 +125,12 @@ h3 {
     align-items: center;
 }
 
-.fake-navbar .left-items {
+.fake-navbar .fn-left-items {
     display: flex;
     gap: 10px;
 }
 
-.fake-navbar .right-items {
+.fake-navbar .fn-right-items {
     margin-left: auto;
     display: flex;
     gap: 10px;
@@ -169,13 +150,13 @@ h3 {
     color: black;
 }
 
-.left-items p:first-child {
+.fn-left-items p:first-child {
     font-weight: bold;               /* Keep the bold style */
     border-bottom: 3px solid black; /* Thicker bottom border */
     padding-bottom: 3px;             /* Optional: Add space below the text */
 }
 
-.right-items p:first-child {
+.fn-right-items p:first-child {
     border-bottom: 3px solid black; /* Thicker bottom border */
     padding-bottom: 3px;             /* Optional: Add space below the text */
 }
@@ -223,7 +204,6 @@ h3 {
   
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .header,
     .game-container,
     .footer {
         width: 100%;

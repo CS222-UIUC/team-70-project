@@ -30,4 +30,4 @@ function ArticleDisplay({ articleData }) {
     );
 }
 
-export default ArticleDisplay
+export default ArticleDisplay;

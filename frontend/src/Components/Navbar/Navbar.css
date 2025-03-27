@@ -1,0 +1,37 @@
+.navbar {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0px auto;
+    padding: 10px 2.75rem;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif Pro', serif;
+    font-weight: 400;
+    font-size: 40px;
+    color: #000000;
+    text-align: start;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #36c;
+    font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        width: 100%;
+        padding: 5px;
+    }
+}

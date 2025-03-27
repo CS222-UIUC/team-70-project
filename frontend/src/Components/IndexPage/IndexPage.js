@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './IndexPage.css';
+import Navbar from '../Navbar/Navbar';
 import ArticleDisplay from '../ArticleDisplay/ArticleDisplay';
 import VirtualKeyboard from '../Keyboard/keyboard.js';
 
@@ -55,9 +56,7 @@ function IndexPage() {
     };
     return (
         <div className = "index-page">
-            <div className = "header">
-                <h3 className = "title">Wikipedle</h3>
-            </div>
+            <Navbar />
 
             <div className = "game-container">
                 <div className = "left-sidebar">
@@ -81,11 +80,11 @@ function IndexPage() {
 
                     <div className = "article-display-wrapper">
                         <div className = "fake-navbar">
-                            <div className = "left-items">
+                            <div className = "fn-left-items">
                                 <p className = "bold">Article</p>
                                 <p>Talk</p>
                             </div>
-                            <div className = "right-items">
+                            <div className = "fn-right-items">
                                 <p className = "bold">Read</p>
                                 <p>View source</p>
                                 <p>View history</p>
