@@ -81,7 +81,16 @@ function IndexPage() {
 
                     <div className = "article-display-wrapper">
                         <div className = "fake-navbar">
-                            <h3>Article Display Area</h3>
+                            <div className = "left-items">
+                                <p className = "bold">Article</p>
+                                <p>Talk</p>
+                            </div>
+                            <div className = "right-items">
+                                <p className = "bold">Read</p>
+                                <p>View source</p>
+                                <p>View history</p>
+                                <p>Tools</p>
+                            </div>
                         </div>
                         <div className="divider"></div>
                     </div>

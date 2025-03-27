@@ -68,7 +68,7 @@ h3 {
 .scoreboard-title-wrapper {
     display: flex;
     align-items: flex-end;
-    height: 93px;
+    height: 92px;
 }
 
 .scoreboard-title-wrapper h3 {
@@ -123,6 +123,47 @@ h3 {
 .article-display-wrapper {
     flex: 1;
     overflow-y: auto;
+}
+
+.fake-navbar {
+    display: flex;
+    align-items: center;
+}
+
+.fake-navbar .left-items {
+    display: flex;
+    gap: 10px;
+}
+
+.fake-navbar .right-items {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.article-display-wrapper .divider {
+    margin: 0;
+}
+
+.fake-navbar p {
+    font-size: 0.875rem;
+    color: #36c;
+}
+
+.fake-navbar .bold {
+    font-weight: bold;
+    color: black;
+}
+
+.left-items p:first-child {
+    font-weight: bold;               /* Keep the bold style */
+    border-bottom: 3px solid black; /* Thicker bottom border */
+    padding-bottom: 3px;             /* Optional: Add space below the text */
+}
+
+.right-items p:first-child {
+    border-bottom: 3px solid black; /* Thicker bottom border */
+    padding-bottom: 3px;             /* Optional: Add space below the text */
 }
 
 .footer {
