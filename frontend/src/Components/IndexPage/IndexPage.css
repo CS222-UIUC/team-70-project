@@ -130,6 +130,12 @@ h3 {
     overflow: hidden;
 }
 
+.keyboard-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .keyboard-wrapper div {
     width: 100%; 
 }

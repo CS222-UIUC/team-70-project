@@ -89,7 +89,7 @@ function IndexPage() {
 
             <div className = "footer">
                 <div className = "keyboard-wrapper">
-                    <div className="keyboardcontainer"> 
+                    <div className="keyboard-container"> 
                         <VirtualKeyboard onKeyPress={handleKeyPress} />
                     </div>
                 </div>
