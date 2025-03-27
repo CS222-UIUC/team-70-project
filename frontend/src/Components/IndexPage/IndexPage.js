@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './IndexPage.css';
 import Navbar from '../Navbar/Navbar';
+import GuessScoreboard from '../GuessScoreboard/GuessScoreboard';
+import FriendScoreboard from '../FriendScoreboard/FriendScoreboard';
 import ArticleDisplay from '../ArticleDisplay/ArticleDisplay';
 import VirtualKeyboard from '../Keyboard/keyboard.js';
 
@@ -59,12 +61,7 @@ function IndexPage() {
             <Navbar />
 
             <div className = "game-container">
-                <div className = "left-sidebar">
-                    <div className = "scoreboard-title-wrapper">
-                        <h3>Past Guess Scoreboard</h3>
-                    </div>
-                    <div className="divider"></div>
-                </div>
+                <GuessScoreboard />
 
                 <div className = "content">
                     <div className = "input-container-wrapper" onClick={() => textInputRef.current && textInputRef.current.focus()}>
@@ -97,12 +94,7 @@ function IndexPage() {
                     </div>
                 </div>
 
-                <div className = "right-sidebar">
-                    <div className = "scoreboard-title-wrapper">
-                        <h3>Friend Scoreboard</h3>
-                    </div>
-                    <div className="divider"></div>
-                </div>
+                <FriendScoreboard />
             </div>
 
             <div className = "footer">
