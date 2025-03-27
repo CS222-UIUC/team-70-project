@@ -79,8 +79,10 @@ function IndexPage() {
                         />
                     </div>
 
-                    <div className = "article-display">
-                        <h3>Article Display Area</h3>
+                    <div className = "article-display-wrapper">
+                        <div className = "fake-navbar">
+                            <h3>Article Display Area</h3>
+                        </div>
                         <div className="divider"></div>
                     </div>
                 </div>

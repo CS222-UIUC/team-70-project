@@ -120,7 +120,7 @@ h3 {
     overflow: hidden;  /* Hide any overflow */
 }
 
-.article-display {
+.article-display-wrapper {
     flex: 1;
     overflow-y: auto;
 }
