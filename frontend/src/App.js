@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes,useLocation} from 'react-router-dom';
+// import React, { useState, useRef, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
+import { BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
 import './App.css';
 import './Components/Keyboard/keyboard.css'; 
 import {ProfilePage} from './Components/ProfilePage/ProfilePage';
