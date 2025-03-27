@@ -11,49 +11,49 @@ function IndexPage() {
         if (textInputRef.current) {
           textInputRef.current.focus(); //.focus() sets focus on textboxes
         }
-      }, []);
+    }, []);
     //cases for keypresses
-      const handleKeyPress = (key) => {
+    const handleKeyPress = (key) => {
         switch (key) {
-          case "Backspace":
-            setInputValue((prev) => prev.slice(0, -1));
-            break;
-          case "Space":
-            setInputValue((prev) => prev + " ");
-            break;
-          case "Tab":
-            setInputValue((prev) => prev + "\t");
-            break;
-          case "Enter":
-            setInputValue((prev) => prev + "\n");
-            break;
-          case "Caps":
-          case "Shift":
-          case "Ctrl":
-          case "Alt":
+            case "Backspace":
+                setInputValue((prev) => prev.slice(0, -1));
+                break;
+            case "Space":
+                setInputValue((prev) => prev + " ");
+                break;
+            case "Tab":
+                setInputValue((prev) => prev + "\t");
+                break;
+            case "Enter":
+                setInputValue((prev) => prev + "\n");
+                break;
+            case "Caps":
+            case "Shift":
+            case "Ctrl":
+            case "Alt":
             // These keys don't add text
-            break;
-          default:
-            setInputValue((prev) => prev + key);
-            break;
+                break;
+            default:
+                setInputValue((prev) => prev + key);
+                break;
         }
         // Refocus the hidden input after virtual key press
         if (textInputRef.current) {
-          textInputRef.current.focus();
+            textInputRef.current.focus();
         }
-      };
+    };
     
-      const handleInputChange = (e) => {
+    const handleInputChange = (e) => {
         setInputValue(e.target.value);
-      };
-    
-      const handleKeyDown = (e) => {
+    };
+
+    const handleKeyDown = (e) => {
         if (e.key === "Tab") {
-          e.preventDefault();
-          setInputValue((prev) => prev + "\t");
+            e.preventDefault();
+            setInputValue((prev) => prev + "\t");
         }
-      };
-      return (
+    };
+    return (
         <div className = "index-page">
             <div className = "header">
                 <h3 className = "title">Wikipedle</h3>
@@ -114,7 +114,7 @@ function IndexPage() {
                 </div>
             </div>
         </div>
-      );
+    );
 }
 
 export default IndexPage;
