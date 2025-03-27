@@ -4,21 +4,10 @@ import './App.css';
 import './Components/Keyboard/keyboard.css'; 
 import {ProfilePage} from './Components/ProfilePage/ProfilePage';
 import IndexPage from './Components/IndexPage/IndexPage';
-import NavLink from './Components/NavLink';
 import Login from './Components/Login/Login';
 import Signup from './Components/Signup/Signup';
 
 function App() {
-  // eslint-disable-next-line no-unused-vars
-  const RouteObserver = ({ children }) => {
-    const location = useLocation();
-    return (
-      <>
-        <NavLink currentPath={location.pathname} />
-        {children}
-      </>
-    );
-  };
   return (
     <Router>
       <Routes>
