@@ -121,7 +121,7 @@ class WikipediaService:
         
         for article in random_articles:
             # Check if already cached
-            existing = ArticleService.get_article_by_id(str(article['id']))
+            existing = ArticleService.get_article_by_id(str(article['pageid']))
             if existing:
                 cached_articles.append(existing)
                 continue
