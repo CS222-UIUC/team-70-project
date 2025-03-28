@@ -181,34 +181,6 @@ def save_user_profile(sender, instance, **kwargs):
     if hasattr(instance, 'profile'):
         instance.profile.save()
 
-class ArticleCache(models.Model):
-    """Cache for Wikipedia articles to reduce API calls"""
-    article_id = models.CharField(max_length=255, unique=True)
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    image_urls = models.JSONField(default=list, blank=True)
-    retrieved_date = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        verbose_name_plural = "Article caches"
-    
-    def __str__(self):
-        return f"{self.title} ({self.article_id})"
-
-
-class DailyArticle(models.Model):
-    """Stores the article selected for each day's game"""
-    date = models.DateField(unique=True)
-    article = models.ForeignKey(ArticleCache, on_delete=models.PROTECT)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        ordering = ['-date']
-    
-    def __str__(self):
-        return f"Article for {self.date}: {self.article.title}"
-
-
 class GlobalLeaderboard(models.Model):
     """Daily global leaderboard cache for performance"""
     date = models.DateField(unique=True)
@@ -251,3 +223,30 @@ class GlobalLeaderboard(models.Model):
             ).aggregate(avg=models.Avg('score'))['avg'] or 0,
         }
         self.save()
+
+class ArticleCache(models.Model):
+    """Cache for Wikipedia articles to reduce API calls"""
+    article_id = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    image_urls = models.JSONField(default=list, blank=True)
+    retrieved_date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Article caches"
+    
+    def __str__(self):
+        return f"{self.title} ({self.article_id})"
+
+
+class DailyArticle(models.Model):
+    """Stores the article selected for each day's game"""
+    date = models.DateField(unique=True)
+    article = models.ForeignKey(ArticleCache, on_delete=models.PROTECT)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date']
+    
+    def __str__(self):
+        return f"Article for {self.date}: {self.article.title}"
