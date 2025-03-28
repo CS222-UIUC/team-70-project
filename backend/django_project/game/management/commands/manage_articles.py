@@ -8,8 +8,7 @@ from ...article_service import ArticleService
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
-    help = 'Manage Wikipedle articles (select daily, cleanup, etc.)'
-
+    help = 'Manage Wikipedia articles (select daily, cleanup, etc.)'
     def add_arguments(self, parser):
         # Named (optional) arguments
         parser.add_argument(
