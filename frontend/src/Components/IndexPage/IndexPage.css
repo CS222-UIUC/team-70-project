@@ -1,0 +1,216 @@
+.index-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h3 {
+    font-family: sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    text-align: center;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #c0c0c0;
+    margin: 3px 0;
+}
+
+.game-container {
+    display: flex;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    flex: 1;
+    background: #FFFFFF;
+}
+
+.scoreboard-title-wrapper {
+    display: flex;
+    align-items: flex-end;
+    height: 92px;
+}
+
+.scoreboard-title-wrapper h3 {
+    font-weight: bold;
+}
+
+.content {
+    flex: 1;  /* Take up all remaining space */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;  /* Allow content to shrink below its natural width */
+    padding: 20px;
+    padding-bottom: 0px;
+}
+
+.input-container-wrapper {
+    width: 100%;
+    min-height: 54px;
+    height: auto;
+    border: 2px solid rgba(0,0,0,0.4);
+    overflow: visible;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.input-container-wrapper pre {
+    text-align: left;
+    display: block;
+    width: calc(100% - 28px);
+    height: calc(100% - 28px);
+    margin: 0;
+    padding: 14px;
+    font-size: 20px;
+    font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif Pro', serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.hidden-textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    height: 1px;  /* Give it minimal height */
+    width: 1px;   /* Give it minimal width */
+    pointer-events: none;  /* Prevent it from interfering with clicks */
+    overflow: hidden;  /* Hide any overflow */
+}
+
+.article-display-wrapper {
+    flex: 1;                     /* Allow it to grow and take available space */
+    max-height: 52.5vh;           /* Set a maximum height (60% of the viewport height) */
+    overflow-y: hidden;            /* Allow vertical scrolling if content exceeds max height */
+    position: relative;          /* Position relative for the pseudo-element */
+}
+
+.article-display-wrapper::after {
+    content: '';                 /* Required for pseudo-element */
+    position: absolute;          /* Position it absolutely */
+    bottom: 0;                  /* Align to the bottom */
+    left: 0;                    /* Align to the left */
+    right: 0;                   /* Align to the right */
+    height: 150px;               /* Height of the fade effect */
+    background: linear-gradient(to bottom, transparent, white); /* Fading effect */
+    pointer-events: none;       /* Allow clicks to pass through */
+}
+
+.fake-navbar {
+    display: flex;
+    align-items: center;
+}
+
+.fake-navbar .fn-left-items {
+    display: flex;
+    gap: 10px;
+}
+
+.fake-navbar .fn-right-items {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.article-display-wrapper .divider {
+    margin: 0;
+}
+
+.fake-navbar p {
+    font-size: 0.875rem;
+    color: #36c;
+}
+
+.fake-navbar .bold {
+    font-weight: bold;
+    color: black;
+}
+
+.fn-left-items p:first-child {
+    font-weight: bold;               /* Keep the bold style */
+    border-bottom: 3px solid black; /* Thicker bottom border */
+    padding-bottom: 3px;             /* Optional: Add space below the text */
+}
+
+.fn-right-items p:first-child {
+    border-bottom: 3px solid black; /* Thicker bottom border */
+    padding-bottom: 3px;             /* Optional: Add space below the text */
+}
+
+.blurb {
+    font-size: 0.875rem;
+    padding-top: 8px;
+    padding-bottom: 16px;
+}
+
+.footer {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 10px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.keyboard-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    max-height: 30vh;
+    overflow: hidden;
+}
+
+.keyboard-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.keyboard-wrapper div {
+    width: 100%; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .left-sidebar, .right-sidebar {
+      width: 200px;
+    }
+  }
+  
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .index-page {
+        overflow-y: auto;
+    }
+
+    .game-container,
+    .footer {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .game-container {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .content {
+        order: 1;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .article-display {
+        flex: 1;
+        min-height: 0; /* Allow content to shrink */
+    }
+}

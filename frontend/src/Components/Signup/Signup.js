@@ -17,6 +17,7 @@ function Signup() {
   // Fetch CSRF token -> CSRF token isn't set up to hook into allauth just yet
   useEffect(() => {
     axios.get('http://localhost:8000/accounts/csrf/')
+      // eslint-disable-next-line no-unused-vars
       .then(response => {
         const csrfToken = getCookie('csrftoken');
         setCsrfToken(csrfToken);

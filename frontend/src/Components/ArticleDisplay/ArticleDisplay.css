@@ -1,0 +1,11 @@
+.article-display {
+    overflow-y: hidden;
+    flex: 0 1 auto;
+    width: 100%;
+}
+
+.article-text {
+    font-family: sans-serif;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}

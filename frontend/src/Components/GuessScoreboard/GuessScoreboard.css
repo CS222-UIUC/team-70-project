@@ -1,0 +1,15 @@
+.guess-scoreboard {
+    width: 250px;  /* Fixed width */
+    flex-shrink: 0;  /* Prevent sidebar from shrinking */
+    background: #ffffff;
+    padding: 20px 10px;
+    margin-left: 2.75rem;
+}
+
+@media (max-width: 768px) {
+    .guess-scoreboard{
+        width: 100%;
+        flex-shrink: unset;
+        margin-left: unset;
+    }
+}
