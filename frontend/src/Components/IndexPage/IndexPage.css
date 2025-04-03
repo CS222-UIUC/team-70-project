@@ -50,6 +50,8 @@ h3 {
 }
 
 .input-container-wrapper {
+    display: flex;
+    align-items: center;
     width: 100%;
     min-height: 54px;
     height: auto;
@@ -59,6 +61,18 @@ h3 {
     margin-bottom: 20px;
     position: relative;
     box-sizing: border-box;
+}
+
+.text-container {
+    flex: 0 1 90%;
+    max-width: 90%;
+}
+
+.submit-button-container {
+    flex: 0 0 10%;
+    min-width: 10%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .input-container-wrapper pre {
@@ -84,6 +98,24 @@ h3 {
     width: 1px;   /* Give it minimal width */
     pointer-events: none;  /* Prevent it from interfering with clicks */
     overflow: hidden;  /* Hide any overflow */
+}
+
+.submit-button {
+    padding: 10px 10px; /* Adjust padding for a smaller button */
+    font-size: 15px; /* Decrease font size to fit text on one line */
+    min-width: 90px; /* Set a minimum width for the button */
+    max-width: 110px; /* Set a maximum width for the button */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Add some border radius */
+    background-color: #28a745; /* Green background color */
+    color: white; /* Button text color */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    margin-right: 3px;
+}
+
+.submit-button:hover {
+    background-color: #218838; /* Darker green shade on hover */
 }
 
 .article-display-wrapper {

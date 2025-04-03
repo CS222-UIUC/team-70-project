@@ -56,6 +56,12 @@ function IndexPage() {
             setInputValue((prev) => prev + "\t");
         }
     };
+
+    const handleSubmit = () => {
+        // Implement the submit logic here
+        console.log("Submitted input:", inputValue);
+    };
+
     return (
         <div className = "index-page">
             <Navbar />
@@ -65,14 +71,20 @@ function IndexPage() {
 
                 <div className = "content">
                     <div className = "input-container-wrapper" onClick={() => textInputRef.current && textInputRef.current.focus()}>
-                        <pre>{inputValue}</pre>
-                        <textarea
-                        ref={textInputRef}
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
-                        className="hidden-textarea"
-                        />
+                        <div className="text-container">
+                            <pre>{inputValue}</pre>
+                            <textarea
+                            ref={textInputRef}
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                            className="hidden-textarea"
+                            />
+                        </div>
+                        
+                        <div className="submit-button-container">
+                            <button className = "submit-button" onClick={handleSubmit}>Submit &#8594;</button>
+                        </div>
                     </div>
 
                     <div className = "article-display-wrapper">

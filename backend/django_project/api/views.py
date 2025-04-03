@@ -103,6 +103,10 @@ def get_guess_scoreboard(request):
     response_data = {
         "request": "get_guess_scoreboard",
         "get_parameters": get_parameters,
+        "scores": {
+            "test1" : 100,
+            "test2" : 200,
+        },
     }
 
     return JsonResponse(response_data)
