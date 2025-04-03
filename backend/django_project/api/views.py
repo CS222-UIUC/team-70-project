@@ -94,7 +94,13 @@ def get_guess_scoreboard(request):
 
     This function response with serialized data on the player's past guesses and their scores
 
-    request must contian field "token"
+    The scores should be returned in the body by parameter "scores" with the format:
+
+    "scores" : {
+        "guess1" : score1,
+        "guess2" : score2,
+        ...
+    }
     """
     # Iterate through all GET parameters
     get_parameters = {key: request.GET.get(key) for key in request.GET}
@@ -118,7 +124,13 @@ def get_friend_scoreboard(request):
 
     This function response with serialized data on a players' friends' scores for the day
 
-    request must contian field "token"
+    rThe scores should be returned in the body by parameter "scores" with the format:
+
+    "scores" : {
+        "friend1" : score1,
+        "friend2" : score2,
+        ...
+    }
     """
     # Iterate through all GET parameters
     get_parameters = {key: request.GET.get(key) for key in request.GET}
