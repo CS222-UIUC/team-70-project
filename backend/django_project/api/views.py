@@ -83,6 +83,17 @@ def get_scrambled_article(request):
     response_data = {
         "request": "get_scrambled_article",
         "get_parameters": get_parameters,
+        "article": {
+            "main-text" : "This is the article main text \n This is a new line \n A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long line",
+            "header" : "First Header",
+            "header-text": "This is the text under the first header",
+            "image-url": "https://i.imgur.com/FAJDCm7.jpeg",
+            "image-title": "Image Title",
+            "captions": {
+                "caption" : "This is the first caption",
+                "caption2" : "Second caption here"
+            },
+        }
     }
 
     return JsonResponse(response_data)
@@ -139,6 +150,7 @@ def get_friend_scoreboard(request):
     response_data = {
         "request": "get_friend_scoreboard",
         "get_parameters": get_parameters,
+        "scores": {}
     }
 
     return JsonResponse(response_data)

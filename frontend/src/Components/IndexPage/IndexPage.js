@@ -6,6 +6,8 @@ import FriendScoreboard from '../FriendScoreboard/FriendScoreboard';
 import ArticleDisplay from '../ArticleDisplay/ArticleDisplay';
 import VirtualKeyboard from '../Keyboard/keyboard.js';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 function IndexPage() {
     const [inputValue, setInputValue] = useState("");
     const textInputRef = useRef(null);
@@ -60,6 +62,33 @@ function IndexPage() {
     const handleSubmit = () => {
         // Implement the submit logic here
         console.log("Submitted input:", inputValue);
+
+        // Make POST request to API with guess
+        const trimmedInputValue = inputValue.trim();
+        if (trimmedInputValue !== "") {
+            const url = `${API_BASE_URL}process_guess/`;
+            const data = { guess: trimmedInputValue };
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Reset values in the input box and hidden text area
+        setInputValue("");
+        if (textInputRef.current) {
+            textInputRef.current.value = "";
+        }
     };
 
     return (
@@ -102,7 +131,7 @@ function IndexPage() {
                         </div>
                         <div className="divider"></div>
                         <p className="blurb">From Wikipedia, the free encyclopedia</p>
-                        <ArticleDisplay articleData={{ "main-text" : null }}/>
+                        <ArticleDisplay />
                     </div>
                 </div>
 
