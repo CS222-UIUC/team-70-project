@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "allauth.account",  # django-allauth
     'corsheaders',
     'api', # api app
+    'game',
 ]
 
 MIDDLEWARE = [
