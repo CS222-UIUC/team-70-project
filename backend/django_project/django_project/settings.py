@@ -43,9 +43,9 @@ INSTALLED_APPS = [
     "django.contrib.sites",  # django-allauth
     "allauth",  # django-allauth
     "allauth.account",  # django-allauth
-    "corsheaders",
-    #  'game.apps.GameConfig',
-    "game",
+    'corsheaders',
+    'api', # api app
+    'game',
 ]
 
 MIDDLEWARE = [

@@ -12,7 +12,7 @@ const VirtualKeyboard = ({ onKeyPress }) => {
   ];
 
   return (
-    <div className="container">
+    <div className="keyboard">
       {rows.map((row, rowIndex) => (
         <div key={rowIndex} className="row">
           {row.map((key, keyIndex) => (

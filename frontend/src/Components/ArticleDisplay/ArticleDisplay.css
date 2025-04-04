@@ -1,0 +1,37 @@
+.article-display {
+    overflow-y: hidden;
+    flex: 0 1 auto;
+    width: 100%;
+    display: flex;
+}
+
+.article-text {
+    font-family: sans-serif;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+.article-text-wrapper {
+    flex: 0 1 100%;
+    max-width: 100%;
+}
+
+.article-image-wrapper {
+    flex: 0 1 25%;
+    max-width: min(30%, 200px);
+
+}
+
+.article-image-wrapper img {
+    width: 100%;
+    height: auto;
+    max-height: 30vh;
+    border: 1px solid #808080;
+}
+
+.image-box {
+    background-color: #d9dde2bd;
+    padding: 3px;
+    border: 1px solid #808080;
+    border-radius: 1px;
+}
