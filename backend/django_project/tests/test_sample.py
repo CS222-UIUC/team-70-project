@@ -1,4 +1,4 @@
-# Dummy comment change to fire githook
+# pylint: skip-file
 
 def func(x):
     return x + 1
