@@ -94,7 +94,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("device_id", models.UUIDField(default=uuid.uuid4, editable=False)),
+                (
+                    "device_id",
+                    models.UUIDField(default=uuid.uuid4, editable=False),
+                ),
                 ("device_name", models.CharField(blank=True, max_length=100)),
                 (
                     "device_type",
@@ -137,9 +140,15 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("login_time", models.DateTimeField(auto_now_add=True)),
-                ("ip_address", models.GenericIPAddressField(blank=True, null=True)),
+                (
+                    "ip_address",
+                    models.GenericIPAddressField(blank=True, null=True),
+                ),
                 ("user_agent", models.TextField(blank=True, null=True)),
-                ("session_key", models.CharField(blank=True, max_length=40, null=True)),
+                (
+                    "session_key",
+                    models.CharField(blank=True, max_length=40, null=True),
+                ),
                 (
                     "user",
                     models.ForeignKey(
@@ -174,7 +183,10 @@ class Migration(migrations.Migration):
                 ("average_score", models.FloatField(default=0.0)),
                 ("best_score", models.IntegerField(default=0)),
                 ("daily_reminder", models.BooleanField(default=True)),
-                ("friend_activity_notifications", models.BooleanField(default=True)),
+                (
+                    "friend_activity_notifications",
+                    models.BooleanField(default=True),
+                ),
                 ("dark_mode", models.BooleanField(default=False)),
                 ("public_profile", models.BooleanField(default=True)),
                 ("show_on_leaderboard", models.BooleanField(default=True)),
@@ -202,7 +214,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("token", models.UUIDField(default=uuid.uuid4, editable=False)),
+                (
+                    "token",
+                    models.UUIDField(default=uuid.uuid4, editable=False),
+                ),
                 (
                     "purpose",
                     models.CharField(
@@ -247,7 +262,10 @@ class Migration(migrations.Migration):
                 ("time_taken", models.IntegerField(default=0)),
                 ("guesses", models.IntegerField(default=0)),
                 ("completed", models.BooleanField(default=False)),
-                ("article_title", models.CharField(blank=True, max_length=255)),
+                (
+                    "article_title",
+                    models.CharField(blank=True, max_length=255),
+                ),
                 ("last_guess", models.CharField(blank=True, max_length=255)),
                 ("hints_used", models.IntegerField(default=0)),
                 (
