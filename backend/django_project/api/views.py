@@ -13,17 +13,19 @@ from django.http import JsonResponse
 # IMPORT MODEL FROM DATABASE (IF NEEDED)
 # IMPORT SERIALIZER FROM DATABASE OR API (IF NEEDED)
 
+
 @api_view(['GET', 'POST'])
 def example_view(request):
-    """ 
-    DEBUG PATH 
+    """
+    DEBUG PATH
     """
     # Access the request method
     method = request.method
 
     # Access GET parameters
     if method == 'GET':
-        name = request.GET.get('name', 'Guest')  # Default to 'Guest' if not provided
+        # Default to 'Guest' if not provided
+        name = request.GET.get('name', 'Guest')
 
     # Access POST parameters
     else:
@@ -47,10 +49,12 @@ def example_view(request):
     return Response(response_data)
 
 ### API PATHS ###
+
+
 @login_required
 @api_view(['GET'])
 def get_user_info(request):
-    """ 
+    """
     get_user_info(request)
 
     This function responds with user's username and streak given they are logged in
@@ -67,9 +71,10 @@ def get_user_info(request):
 
     return JsonResponse(user_info)
 
+
 @api_view(['GET'])
 def get_scrambled_article(request):
-    """ 
+    """
     get_scrambled_article(request)
 
     This function responds with serialized, scrambled article data given a user's session token
@@ -97,6 +102,7 @@ def get_scrambled_article(request):
     }
 
     return JsonResponse(response_data)
+
 
 @api_view(['GET'])
 def get_guess_scoreboard(request):
@@ -128,6 +134,7 @@ def get_guess_scoreboard(request):
 
     return JsonResponse(response_data)
 
+
 @api_view(['GET'])
 def get_friend_scoreboard(request):
     """
@@ -154,6 +161,7 @@ def get_friend_scoreboard(request):
     }
 
     return JsonResponse(response_data)
+
 
 @api_view(['POST'])
 def process_guess(request):

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "allauth",  # django-allauth
     "allauth.account",  # django-allauth
     'corsheaders',
-    'api', # api app
+    'api',  # api app
     'game',
 ]
 

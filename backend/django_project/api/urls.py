@@ -15,10 +15,27 @@ from .views import (
 )
 
 urlpatterns = [
-    path('user_info/', get_user_info, name='user_info'),
-    path('scrambled_article/', get_scrambled_article, name='scrambled_article'),
-    path('guess_scoreboard/', get_guess_scoreboard, name='guess_scoreboard'),
-    path('friend_scoreboard/', get_friend_scoreboard, name='friend_scoreboard'),
-    path('process_guess/', process_guess, name='process_guess'),
-    path('example/', example_view, name='example_view')
-]
+    path(
+        'user_info/',
+        get_user_info,
+        name='user_info'),
+    path(
+        'scrambled_article/',
+        get_scrambled_article,
+        name='scrambled_article'),
+    path(
+        'guess_scoreboard/',
+        get_guess_scoreboard,
+        name='guess_scoreboard'),
+    path(
+        'friend_scoreboard/',
+        get_friend_scoreboard,
+        name='friend_scoreboard'),
+    path(
+        'process_guess/',
+        process_guess,
+        name='process_guess'),
+    path(
+        'example/',
+        example_view,
+        name='example_view')]
