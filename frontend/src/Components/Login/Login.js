@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
@@ -9,16 +9,39 @@ function Login() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [csrfToken, setCsrfToken] = useState('');
   const navigate = useNavigate();
+
+  // Fetch CSRF token
+  useEffect(() => {
+    axios.get('http://localhost:8000/csrf/', { withCredentials: true })
+      .then(response => {
+        console.log('CSRF response:', response.data);
+        const token = response.data.csrfToken;
+        setCsrfToken(token);
+        console.log('CSRF token set:', token);
+      })
+      .catch(error => {
+        console.error('Error fetching CSRF token:', error);
+      });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!csrfToken) {
+      setError('CSRF token not available. Please refresh the page and try again.');
+      return;
+    }
+    
     try {
-      const response = await axios.post('/accounts/login/', formData, {
+      console.log('Submitting with CSRF token:', csrfToken);
+      const response = await axios.post('http://localhost:8000/login/', formData, {
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken'),
+          'X-CSRFToken': csrfToken,
         },
+        withCredentials: true
       });
       
       if (response.status === 200) {
@@ -30,12 +53,12 @@ function Login() {
     }
   };
 
-  // Utility function to get CSRF token from cookies -> similar to Signup.js not implemented yet
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
+  // Utility function to get CSRF token from cookies
+  // function getCookie(name) {
+  //   const value = `; ${document.cookie}`;
+  //   const parts = value.split(`; ${name}=`);
+  //   if (parts.length === 2) return parts.pop().split(';').shift();
+  // }
 
   // page render function
   return (

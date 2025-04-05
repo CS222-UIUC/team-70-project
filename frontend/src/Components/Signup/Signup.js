@@ -16,11 +16,12 @@ function Signup() {
 
   // Fetch CSRF token -> CSRF token isn't set up to hook into allauth just yet
   useEffect(() => {
-    axios.get('http://localhost:8000/accounts/csrf/')
-      // eslint-disable-next-line no-unused-vars
+    axios.get('http://localhost:8000/csrf/', { withCredentials: true })
       .then(response => {
-        const csrfToken = getCookie('csrftoken');
-        setCsrfToken(csrfToken);
+        console.log('CSRF response:', response.data);
+        const token = response.data.csrfToken;
+        setCsrfToken(token);
+        console.log('CSRF token set:', token);
       })
       .catch(error => {
         console.error('Error fetching CSRF token:', error);
@@ -30,14 +31,18 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    
     if (formData.password1 !== formData.password2) {
       setError('Passwords do not match');
       return;
     }
 
+    if (!csrfToken) {
+      setError('CSRF token not available. Please refresh the page and try again.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:8000/accounts/signup/', 
+      const response = await axios.post('http://localhost:8000/signup/', 
         {
           username: formData.username,
           email: formData.email,
@@ -63,7 +68,13 @@ function Signup() {
         // Handle specific error messages from Django
         const errorMessages = [];
         for (const key in error.response.data) {
-          errorMessages.push(`${key}: ${error.response.data[key].join(' ')}`);
+          const value = error.response.data[key];
+          // Check if the value is an array before trying to join
+          if (Array.isArray(value)) {
+            errorMessages.push(`${key}: ${value.join(' ')}`);
+          } else {
+            errorMessages.push(`${key}: ${value}`);
+          }
         }
         setError(errorMessages.join('\n'));
       } else {
@@ -72,11 +83,11 @@ function Signup() {
     }
   };
 
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
+  // function getCookie(name) {
+  //   const value = `; ${document.cookie}`;
+  //   const parts = value.split(`; ${name}=`);
+  //   if (parts.length === 2) return parts.pop().split(';').shift();
+  // }
   // page render function
   return (
     <div className="signup-container">

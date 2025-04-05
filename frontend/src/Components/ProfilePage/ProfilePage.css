@@ -28,3 +28,85 @@ profile-info {
     background-color: #c0c0c0;
     cursor: not-allowed;
   }
+.user-details {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+
+.user-details h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.email {
+    color: #666;
+    margin-top: 5px;
+}
+
+/* .stats-container {
+    width: 100%;
+}
+
+.stats-container h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+} */
+
+.error-message {
+    color: #dc3545;
+    text-align: center;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f8d7da;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-info {
+        padding: 20px;
+    }
+}

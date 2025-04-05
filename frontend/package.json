@@ -13,18 +13,24 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
     "@eslint/js": "^9.23.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^29.5.14",
+    "babel-jest": "^29.7.0",
     "eslint": "^9.23.0",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-react": "^7.37.4",
     "gh-pages": "^5.0.0",
     "globals": "^16.0.0",
-    "jest": "^29.7.0"
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "util": "^0.12.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,6 +39,15 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --fix --max-warnings=0",
     "jest": "jest --testPathPattern=frontend/tests"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
+    }
   },
   "browserslist": {
     "production": [
