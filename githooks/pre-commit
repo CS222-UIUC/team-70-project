@@ -40,17 +40,27 @@ def main():
     all_checks_passed = True
     
     # Run backend checks if needed
+    # if backend_changes:
+    #     # print("RUNNING PYLINT ON BACKEND...")
+    #     # if not run_command("pylint backend/django_project/django_project"):
+    #     #     print("Pylint check failed. Please fix the issues before committing.")
+    #     #     all_checks_passed = False
+        
+    #     # print("\nRUNNING PYTESTS ON BACKEND...")
+    #     # if not run_command("pytest backend/django_project/tests"):
+    #     #     print("Tests failed. Please fix the failing tests before committing.")
+    #         all_checks_passed = False
+        # Run backend checks if needed
     if backend_changes:
-        print("RUNNING PYLINT ON BACKEND...")
-        if not run_command("pylint backend/django_project/django_project"):
-            print("Pylint check failed. Please fix the issues before committing.")
+        print("RUNNING FLAKE8 ON BACKEND...")
+        if not run_command("flake8 backend/django_project/django_project"):
+            print("Flake8 check failed. Please fix the issues before committing.")
             all_checks_passed = False
         
-        print("\nRUNNING PYTESTS ON BACKEND...")
-        if not run_command("pytest backend/django_project/tests"):
-            print("Tests failed. Please fix the failing tests before committing.")
+        print("\nRUNNING DJANGO TESTS ON BACKEND...")
+        if not run_command("python backend/django_project/manage.py test"):
+            print("Django tests failed. Please fix the failing tests before committing.")
             all_checks_passed = False
-    
     # Run frontend checks if needed
     if frontend_changes:
         frontend_dir = Path('frontend')
