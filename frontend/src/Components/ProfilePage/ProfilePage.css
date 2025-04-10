@@ -47,7 +47,7 @@ profile-info {
     margin-top: 5px;
 }
 
-/* .stats-container {
+.stats-container {
     width: 100%;
 }
 
@@ -88,8 +88,8 @@ profile-info {
     font-size: 24px;
     font-weight: bold;
     color: #007bff;
-} */
-
+}
+ß
 .error-message {
     color: #dc3545;
     text-align: center;

@@ -85,13 +85,17 @@ export function ProfilePage() {
                     <div className="stats-grid">
                         <div className="stat-item">
                             <span className="stat-label">Games Played</span>
-                            <span className="stat-value">{profile.total_games_played || 0}</span>
+                            <span className="stat-value">{profile.games_played}</span>
                         </div>
                         <div className="stat-item">
                             <span className="stat-label">Games Won</span>
                             <span className="stat-value">{profile.games_won || 0}</span>
                         </div>
-                    </div>
+                        <div className="stat-item">
+                                <span className="stat-label">Win Rate</span>
+                                <span className="stat-value">{profile.win_rate.toFixed(1)}%</span>
+                        </div>
+                    </div> 
                 </div> */}
             </div>
         </div>

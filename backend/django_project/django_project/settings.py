@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "allauth",  # django-allauth
     "allauth.account",  # django-allauth
     'corsheaders',
+    #'database_temporary'
 ]
 
 MIDDLEWARE = [
