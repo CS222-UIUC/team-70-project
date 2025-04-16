@@ -26,6 +26,5 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('login/', views.login_view, name='login'),
     path('profile/', views.profile_view, name='profile'),
-    path("api/", include("api.urls"))
     #path('update-stats/', views.update_game_stats, name='update_game_stats'),
 ]

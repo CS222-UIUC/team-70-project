@@ -5,6 +5,9 @@ import jest from "eslint-plugin-jest";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  {
+    ignores: ['**/build/**', '**/dist/**']  // Move ignores to the root level
+  },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
