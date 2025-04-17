@@ -49,15 +49,20 @@ def example_view(request):
     return Response(response_data)
 
 ### API PATHS ###
-
-
 @login_required
 @api_view(['GET'])
 def get_user_info(request):
     """
     get_user_info(request)
 
-    This function responds with user's username and streak given they are logged in
+    JSON Format:
+    user_info = {
+        "request": "get_user_info",
+        "id" : <user id>,
+        "username" : <username>,
+        "email" : <email>,
+        "streak" : <streak>
+    }
     """
     user = request.user  # Access the authenticated user
 
@@ -66,6 +71,7 @@ def get_user_info(request):
         "id": user.id,
         "username": user.username,
         "email": user.email,
+        "streak": 0,
         # Need to return streak once database is merged
     }
 
@@ -79,7 +85,21 @@ def get_scrambled_article(request):
 
     This function responds with serialized, scrambled article data given a user's session token
 
-    request must contain field "token"
+    JSON Format:
+    response_data {
+        "request": "get_scrambled_article",
+        "article": {
+            "main-text" : <main text>,
+            "header" : <header - optional>,
+            "header-text" : <header text - if header>,
+            "image-url" : <img url - optional>,
+            "image-title" : <img title - if image url>,
+            "captions" : {
+                "caption1" : <caption 1 - if image url>,
+                ...
+            }
+        }
+    }
     """
     # Iterate through all GET parameters
     get_parameters = {key: request.GET.get(key) for key in request.GET}
@@ -111,12 +131,14 @@ def get_guess_scoreboard(request):
 
     This function response with serialized data on the player's past guesses and their scores
 
-    The scores should be returned in the body by parameter "scores" with the format:
-
-    "scores" : {
-        "guess1" : score1,
-        "guess2" : score2,
-        ...
+    JSON Format:
+    response_data {
+        "request" : "get_guess_scoreboard",
+        "scores" : {
+            <guess1> : <score1>,
+            <guess2> : <score2>,
+            ...
+        }
     }
     """
     # Iterate through all GET parameters
@@ -142,12 +164,14 @@ def get_friend_scoreboard(request):
 
     This function response with serialized data on a players' friends' scores for the day
 
-    rThe scores should be returned in the body by parameter "scores" with the format:
-
-    "scores" : {
-        "friend1" : score1,
-        "friend2" : score2,
-        ...
+    JSON Format:
+    response_data {
+        "request": "get_friend_scoreboard",
+        "scores" : {
+            "friend1" : score1,
+            "friend2" : score2,
+            ...
+        }
     }
     """
     # Iterate through all GET parameters
