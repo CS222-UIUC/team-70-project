@@ -67,7 +67,7 @@ function IndexPage() {
         const trimmedInputValue = inputValue.trim();
         if (trimmedInputValue !== "") {
             const url = `${API_BASE_URL}process_guess/`;
-            const data = { guess: trimmedInputValue };
+            const data = { 'guess': trimmedInputValue };
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -78,6 +78,7 @@ function IndexPage() {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
+                window.location.reload(); // Reload page 
             })
             .catch((error) => {
                 console.error('Error:', error);

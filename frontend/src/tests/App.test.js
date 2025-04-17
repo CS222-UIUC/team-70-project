@@ -37,7 +37,7 @@ test('default rendering friend scoreboard', () => {
 
 test('default rendering article display', () => {
     render(<ArticleDisplay />);
-    const Lorem = screen.getAllByText(/Lorem ipsum/i);
+    const Lorem = screen.getAllByText(/Loading Article Data.../i);
     expect(Lorem.length).toBeGreaterThan(0);
 })
 

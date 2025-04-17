@@ -10,6 +10,7 @@ from rest_framework.response import Response
 # from rest_framework import status
 from allauth.account.decorators import login_required
 from django.http import JsonResponse
+from . import utils
 # IMPORT MODEL FROM DATABASE (IF NEEDED)
 # IMPORT SERIALIZER FROM DATABASE OR API (IF NEEDED)
 
@@ -101,27 +102,10 @@ def get_scrambled_article(request):
         }
     }
     """
-    # Iterate through all GET parameters
-    get_parameters = {key: request.GET.get(key) for key in request.GET}
-
-    # Prepare the response data
-    response_data = {
-        "request": "get_scrambled_article",
-        "get_parameters": get_parameters,
-        "article": {
-            "main-text" : "This is the article main text \n This is a new line \n A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long line",
-            "header" : "First Header",
-            "header-text": "This is the text under the first header",
-            "image-url": "https://i.imgur.com/FAJDCm7.jpeg",
-            "image-title": "Image Title",
-            "captions": {
-                "caption" : "This is the first caption",
-                "caption2" : "Second caption here"
-            },
-        }
-    }
-
-    return JsonResponse(response_data)
+    if request: # Dummy usage
+        pass
+    
+    return JsonResponse(utils.get_user_article(0)) # 0 is TESTING placeholder for user id
 
 
 @api_view(['GET'])
@@ -132,7 +116,7 @@ def get_guess_scoreboard(request):
     This function response with serialized data on the player's past guesses and their scores
 
     JSON Format:
-    response_data {
+    response_data = {
         "request" : "get_guess_scoreboard",
         "scores" : {
             <guess1> : <score1>,
@@ -141,20 +125,9 @@ def get_guess_scoreboard(request):
         }
     }
     """
-    # Iterate through all GET parameters
-    get_parameters = {key: request.GET.get(key) for key in request.GET}
-
-    # Prepare the response data
-    response_data = {
-        "request": "get_guess_scoreboard",
-        "get_parameters": get_parameters,
-        "scores": {
-            "test1" : 100,
-            "test2" : 200,
-        },
-    }
-
-    return JsonResponse(response_data)
+    if request: # Dummy usage
+        pass
+    return JsonResponse(utils.get_user_scores(0)) # 0 is TESTING placeholder for user id
 
 
 @api_view(['GET'])
@@ -174,13 +147,12 @@ def get_friend_scoreboard(request):
         }
     }
     """
-    # Iterate through all GET parameters
-    get_parameters = {key: request.GET.get(key) for key in request.GET}
-
+    if request: # Dummy usage
+        pass
+    
     # Prepare the response data
     response_data = {
         "request": "get_friend_scoreboard",
-        "get_parameters": get_parameters,
         "scores": {}
     }
 
@@ -196,13 +168,18 @@ def process_guess(request):
 
     request must contain field "token" and "guess"
     """
-    # Iterate through all POST parameters
-    get_parameters = {key: request.POST.get(key) for key in request.GET}
+    # Read guess parameter from post
+    guess = request.data.get('guess')
+    if guess:
+        print("Received guess: " + guess)
+        utils.process_guess(0, guess)
+    else:
+        print("Unable to parse guess")
 
     # Prepare the response data
     response_data = {
         "request": "process_guess",
-        "get_parameters": get_parameters,
+        "guess" : guess
     }
 
     return Response(response_data)
