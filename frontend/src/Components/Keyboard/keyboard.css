@@ -1,21 +1,21 @@
-.keyboard {
+.keyboard-wrapper {
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .keyboard {
-    padding: 5px;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 1000px;
+    width: 1000px;
+    padding: 5px;
     justify-content: center;
     align-items: center;
-    border-radius: 7px;
-    background: #202124;
-    gap: 2px;
+    gap: 4px;
+    background: transparent;
 }
 
 .row {
@@ -23,51 +23,82 @@
     width: 100%;
     justify-content: center;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
+    margin: 0;
 }
 
 .key {
     display: flex;
-    flex: 1 0 40px;
-    width: 40px;
-    height: 40px;
-    margin: 3px;
+    flex: 1;
+    min-width: 20px;
+    height: 52px;
+    margin: 0;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
-    background-color: #445760;
+    background-color: #d3d6da;
+    border: 0;
     border-radius: 4px;
-    color: #ffffff;
-    font-size: 14px;
+    color: #1a1a1b;
+    font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
     cursor: pointer;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    transition: background-color ease-in-out 0.15s;
+    user-select: none;
+    transition: background-color 0.1s ease;
 }
 
-.key:hover{
-    background-color: #3c4d56;
+.key:hover {
+    background-color: #bbbdc0;
 }
 
-.row:first-child .key:first-child{
-    flex: 1 0 40px;
+.key:active {
+    background-color: #a3a6a9;
+    transform: translateY(1px);
 }
 
-.row:first-child .key:last-child{
-    flex: 1 0 60px;
+/* Special keys styling */
+.row:first-child .key:last-child, /* Backspace */
+.row:nth-child(3) .key:last-child { /* Enter */
+    flex: 1.8;
+    font-size: 12px;
+    background-color: #d3d6da;
 }
 
-.row:nth-child(3) .key:first-child{
-    flex: 1 0 70px;
+/* Make first and last rows slightly smaller */
+.row:first-child .key,
+.row:last-child .key {
+    height: 48px;
 }
-.row:nth-child(3) .key:last-child{
-    flex: 1 0 70px;
+
+
+/* Responsive scaling for smaller screens*/
+@media (max-width: 768px) {
+    .keyboard {
+        padding: 3px;
+        gap: 3px;
+    }
+
+    .row {
+        gap: 3px;
+    }
+
+    .key {
+        height: 48px;
+        font-size: 12px;
+    }
+
+    .row:first-child .key,
+    .row:last-child .key {
+        height: 44px;
+    }
 }
-.row:nth-child(4) .key:first-child{
-    flex: 1 0 100px;
-}
-.row:nth-child(4) .key:last-child{
-    flex: 1 0 100px;
-}
-.row:nth-child(5) .key:nth-child(3){
-    flex: 1 0 400px;
+
+@media (max-width: 576px) {
+    .keyboard {
+        --keyboard-scale: 0.6;
+    }
+    .key {
+        height: 20px;
+    }
 }

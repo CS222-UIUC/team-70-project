@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     "allauth",  # django-allauth
     "allauth.account",  # django-allauth
     'corsheaders',
+    #'database_temporary'
+    'api',  # api app
+    'game',
     'api',  # api app
     'game',
 ]
@@ -59,7 +62,8 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React app
 ]
