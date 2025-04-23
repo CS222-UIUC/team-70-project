@@ -292,3 +292,40 @@ class DailyArticle(models.Model):
 
     def __str__(self):
         return f"Article for {self.date}: {self.article.title}"
+
+
+class GameState(models.Model):
+    """Stores a user's game session state for a specific article"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game_states')
+    article = models.ForeignKey('ArticleCache', on_delete=models.CASCADE, related_name='game_states')
+    date = models.DateField(auto_now_add=True)  # Date when the game was created
+    # Use JSONField to store the word scrambling mapping
+    word_mapping = models.JSONField(default=dict)
+    max_guesses = models.IntegerField(default=6)  # Maximum number of allowed guesses
+    is_completed = models.BooleanField(default=False)  # Whether the game is completed
+    best_score = models.IntegerField(default=0)  # Best score achieved
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        # A user can have multiple game states for the same article
+        # No unique_together constraint here
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Game for {self.user.username} on article {self.article.title}"
+
+
+class UserGuess(models.Model):
+    """Stores each guess made by a user in a game state"""
+    game_state = models.ForeignKey('GameState', on_delete=models.CASCADE, related_name='guesses')
+    guess_text = models.CharField(max_length=255)  # The user's guess text
+    score = models.IntegerField(default=0)  # Score for this guess
+    similarity_score = models.FloatField(default=0.0)  # Similarity to the correct answer
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['timestamp']  # Order guesses by time
+
+    def __str__(self):
+        return f"Guess '{self.guess_text}' for game {self.game_state.id}"

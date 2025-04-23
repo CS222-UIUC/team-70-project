@@ -1,0 +1,65 @@
+### Use with REST client in vscode
+
+@host = http://localhost:8000
+@session = ea3d8igj0ym245dvilgi9a9zw2jh1b6w
+@csrf = tgjM1sqD82QvYCNLST2Op4ehcbnYFHbr
+
+### 1. Set article by ID (id = 20)
+POST {{host}}/game/set-article/
+Content-Type: application/json
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+X-CSRFToken: {{csrf}}
+
+{
+  "article_id": "20"
+}
+
+### 2. Set article randomly
+POST {{host}}/game/set-article/
+Content-Type: application/json
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+X-CSRFToken: {{csrf}}
+
+{
+  "source": "random"
+}
+
+### 3. Get daily article
+POST {{host}}/game/set-article/
+Content-Type: application/json
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+X-CSRFToken: {{csrf}}
+
+{
+  "source": "daily"
+}
+
+### 4. Create new game using article 20
+POST {{host}}/game/game-state/
+Content-Type: application/json
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+X-CSRFToken: {{csrf}}
+
+{
+  "article_id": "20"
+}
+
+### 5. Get scrambled dictionary (replace game_id)
+GET {{host}}/game/scrambled-dictionary/?game_id=2
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+
+### 6. Submit guess (replace game_id)
+POST {{host}}/game/guess/
+Content-Type: application/json
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+X-CSRFToken: {{csrf}}
+
+{
+  "game_id": 2,
+  "guess": "Pima villages"
+}
+
+### 7. View all games for the logged-in user
+GET {{host}}/game/game-state/
+Cookie: sessionid={{session}}; csrftoken={{csrf}}
+

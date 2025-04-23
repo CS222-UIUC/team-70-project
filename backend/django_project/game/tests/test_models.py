@@ -2,6 +2,11 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
 import datetime
+import json
+import random
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.urls import reverse
 
 from game.models import (
     UserProfile,
@@ -9,6 +14,8 @@ from game.models import (
     ArticleCache,
     DailyArticle,
     GlobalLeaderboard,
+    GameState,
+    UserGuess,
 )
 
 
@@ -468,3 +475,163 @@ class SignalTest(TestCase):
         # Verify default values in the profile
         self.assertEqual(user.profile.current_streak, 0)
         self.assertEqual(user.profile.max_streak, 0)
+
+
+# Mock NLP functions for testing
+def generate_scrambled_text(content):
+    """Mock function to generate scrambled text"""
+    words = content.lower().split()
+    word_mapping = {}
+
+    for word in words:
+        if word not in word_mapping:
+            # Simple scrambling: reverse the word
+            word_mapping[word] = word[::-1]
+
+    return word_mapping
+
+
+def calculate_guess_score(guess, actual):
+    """Mock function to calculate guess score and similarity"""
+    # Simple similarity: percentage of matching characters
+    guess = guess.lower()
+    actual = actual.lower()
+
+    # Count matching characters
+    matching = sum(1 for a, b in zip(guess, actual) if a == b)
+    similarity = matching / max(len(guess), len(actual))
+
+    # Base score calculation
+    score = int(similarity * 1000)
+
+    return score, similarity
+
+
+class GameStateModelTest(TestCase):
+    """Test the GameState model"""
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create test user
+        cls.test_user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="testpassword",
+        )
+
+        # Create test article
+        cls.test_article = ArticleCache.objects.create(
+            article_id="12345",
+            title="Test Article",
+            content="This is the content of a test article.",
+        )
+
+        # Create test word mapping
+        cls.test_word_mapping = {
+            "content": "ntnetoc",
+            "test": "ttse",
+            "article": "elitacr",
+            "is": "si",
+            "the": "het",
+            "of": "fo",
+            "a": "a",
+            "this": "hist"
+        }
+
+    def test_create_game_state(self):
+        """Test game state creation"""
+        game_state = GameState.objects.create(
+            user=self.test_user,
+            article=self.test_article,
+            word_mapping=self.test_word_mapping,
+            max_guesses=6,
+            is_completed=False,
+            best_score=0
+        )
+
+        self.assertEqual(game_state.user, self.test_user)
+        self.assertEqual(game_state.article, self.test_article)
+        self.assertEqual(game_state.word_mapping, self.test_word_mapping)
+        self.assertEqual(game_state.max_guesses, 6)
+        self.assertFalse(game_state.is_completed)
+        self.assertEqual(game_state.best_score, 0)
+
+    def test_string_representation(self):
+        """Test the string representation method"""
+        game_state = GameState.objects.create(
+            user=self.test_user,
+            article=self.test_article,
+            word_mapping=self.test_word_mapping
+        )
+        self.assertEqual(str(game_state), f"Game for {self.test_user.username} on article {self.test_article.title}")
+
+    def test_default_values(self):
+        """Test that default values are set correctly"""
+        game_state = GameState.objects.create(
+            user=self.test_user,
+            article=self.test_article,
+            word_mapping=self.test_word_mapping
+        )
+
+        self.assertEqual(game_state.max_guesses, 6)  # Default value
+        self.assertFalse(game_state.is_completed)    # Default value
+        self.assertEqual(game_state.best_score, 0)   # Default value
+
+
+class UserGuessModelTest(TestCase):
+    """Test the UserGuess model"""
+
+    @classmethod
+    def setUpTestData(cls):
+        # Create test user
+        cls.test_user = User.objects.create_user(
+            username="testuser",
+            email="test@example.com",
+            password="testpassword",
+        )
+
+        # Create test article
+        cls.test_article = ArticleCache.objects.create(
+            article_id="12345",
+            title="Test Article",
+            content="This is the content of a test article.",
+        )
+
+        # Create test game state
+        cls.test_game_state = GameState.objects.create(
+            user=cls.test_user,
+            article=cls.test_article,
+            word_mapping={"test": "ttse"}
+        )
+
+    def test_create_user_guess(self):
+        """Test user guess creation"""
+        user_guess = UserGuess.objects.create(
+            game_state=self.test_game_state,
+            guess_text="My first guess",
+            score=150,
+            similarity_score=0.35
+        )
+
+        self.assertEqual(user_guess.game_state, self.test_game_state)
+        self.assertEqual(user_guess.guess_text, "My first guess")
+        self.assertEqual(user_guess.score, 150)
+        self.assertEqual(user_guess.similarity_score, 0.35)
+
+    def test_string_representation(self):
+        """Test the string representation method"""
+        user_guess = UserGuess.objects.create(
+            game_state=self.test_game_state,
+            guess_text="My guess"
+        )
+        self.assertEqual(str(user_guess), f"Guess 'My guess' for game {self.test_game_state.id}")
+
+    def test_default_values(self):
+        """Test that default values are set correctly"""
+        user_guess = UserGuess.objects.create(
+            game_state=self.test_game_state,
+            guess_text="My guess"
+        )
+
+        self.assertEqual(user_guess.score, 0)             # Default value
+        self.assertEqual(user_guess.similarity_score, 0.0)  # Default value
