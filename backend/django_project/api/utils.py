@@ -12,7 +12,7 @@ import random
 
 nlp = spacy.load("en_core_web_lg") # python -m spacy download en_core_web_lg
 FULL_THRESH = 0.55          # Absolute similarity threshold for a word to be completely unscrambled
-PARTIAL_THRESH = 0.4        # Partial similarity threshold for a word to be partially unscrambled
+PARTIAL_THRESH = 0.3        # Partial similarity threshold for a word to be partially unscrambled
 FULL_MULTIPLIER = 1         # Multiplier for full threshold reduction based on how close the guess is to title
 PARTIAL_MULTIPLIER = 1.5    # Mulitplier for partial threshold reduction based on how close the guess is to title
 WIN_THRESH = 0.95           # Threshold to pass to win the game
