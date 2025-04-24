@@ -46,9 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     #'database_temporary'
     'api',  # api app
-    'game',
-    'api',  # api app
-    'game',
+    'game'
 ]
 
 MIDDLEWARE = [
