@@ -12,7 +12,7 @@ class FetchWikipediaArticlesCommandTest(TestCase):
     """Test the fetch_wikipedia_articles management command"""
 
     @patch(
-    "game.new_wikipedia_service.NewWikipediaService.fetch_and_cache_random_articles"
+        "game.new_wikipedia_service.NewWikipediaService.fetch_and_cache_random_articles"
     )
     def test_fetch_articles(self, mock_fetch):
         """Test that the command fetches articles from Wikipedia API"""
@@ -30,8 +30,9 @@ class FetchWikipediaArticlesCommandTest(TestCase):
         self.assertIn("Successfully fetched and cached 2 articles", output)
         self.assertIn("Test Article 1", output)
         self.assertIn("Test Article 2", output)
+
     @patch(
-    "game.wikipedia_service.WikipediaService.fetch_and_cache_random_articles"
+        "game.wikipedia_service.WikipediaService.fetch_and_cache_random_articles"
     )
     def test_fetch_articles_old(self, mock_fetch):
         """Test the --old flag uses the original Wikipedia service"""
