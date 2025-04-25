@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     #'database_temporary'
     'api',  # api app
     'game',
-    'api',  # api app
-    'game',
 ]
 
 MIDDLEWARE = [
