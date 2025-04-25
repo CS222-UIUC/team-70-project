@@ -98,7 +98,7 @@ def get_user_article(user_id):
     game_state = None
     try: # Look into logic further later
         game_state = GameState.objects.get(user=user)
-    except:
+    except: # pragma: no cover
         # User has no initialized game, initialize a game for them and update database
         print("LOG: Generating game for UID: " + str(user_id))
         article_text = get_daily_article()["main-text"]
@@ -111,7 +111,7 @@ def get_user_article(user_id):
             article=ArticleCache.objects.get(title=get_daily_article_title()),
             word_mapping=new_state
         )
-        game_state = GameState.objects.get(user=user)
+        game_state = GameState.objects.get(user=user) # pragma: no cover
 
     # IF ARTICLE HAS CHANGED, FLUSH ALL CURRENT STATE AND SCORES FOR USER AND CREATE NEW GAME STATE
     if (get_daily_article_title() != game_state.article.title):
@@ -242,8 +242,6 @@ def update_user_profile(user_id, score: int):
 
     For UTIL use, NOT USER.
     """
-    # TODO: Finish this function and use in process_guess
-
     # Get user profile
     user = User.objects.get(id=user_id)
     user_profile = UserProfile.objects.get(user=user)
