@@ -1,3 +1,5 @@
+# Created with help from Cursor
+
 from django.test import TestCase
 from unittest.mock import patch
 from api.utils import get_daily_article, get_daily_article_title, generate_game, get_letter_bag, get_user_article, get_user_scores, process_guess, update_user_profile, user_finished_game, get_doc, init_random, stringify_state, guess_update

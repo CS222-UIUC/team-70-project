@@ -1,5 +1,7 @@
 # api/tests/test_apps.py
 
+# Created with help from Cursor
+
 from django.test import TestCase
 from api.apps import ApiConfig
 
