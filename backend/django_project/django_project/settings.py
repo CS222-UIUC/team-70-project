@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     #'database_temporary'
     'api',  # api app
     'game',
-    'api',  # api app
-    'game',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'game.middleware.DailyArticleMiddleware',
 ]
 CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
