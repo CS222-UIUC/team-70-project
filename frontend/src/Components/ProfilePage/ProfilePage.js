@@ -69,35 +69,59 @@ export function ProfilePage() {
                 <p className="error-message">{error}</p>
             </div>
         );
-    }
-
-    return (
-        <div className="profile-page">
-            <h1>Profile</h1>
-            <div className="profile-info">
-                <div className="user-details">
-                    <h2>{profile.username}</h2>
-                    <p className="email">{profile.email}</p>
+    }    
+        return (
+            <div className="profile-page">
+                <h1>Profile</h1>
+                <div className="profile-info">
+                    <div className="user-details">
+                        <h2>{profile.username}</h2>
+                        <p className="email">{profile.email}</p>
+                    </div>
+                    <div className="stats-container">
+                        <h3>Game Statistics</h3>
+                        <div className="stats-table">
+                            <div className="stats-row">
+                                <div className="stat-cell">
+                                    <span className="stat-label">Games Played</span>
+                                    <span className="stat-value">{profile.total_games_played}</span>
+                                </div>
+                                <div className="stat-cell">
+                                    <span className="stat-label">Games Won</span>
+                                    <span className="stat-value">{profile.total_wins}</span>
+                                </div>
+                                <div className="stat-cell">
+                                    <span className="stat-label">Win Rate</span>
+                                    <span className="stat-value">{profile.win_rate}%</span>
+                                </div>
+                                <div className="stat-cell">
+                                    <span className="stat-label">Best Score</span>
+                                    <span className="stat-value">{profile.best_score}</span>
+                                </div>
+                            </div>
+                            <div className="stats-row">
+                                <div className="stat-cell">
+                                    <span className="stat-label">Current Streak</span>
+                                    <span className="stat-value">{profile.current_streak}</span>
+                                </div>
+                                <div className="stat-cell">
+                                    <span className="stat-label">Max Streak</span>
+                                    <span className="stat-value">{profile.max_streak}</span>
+                                </div>
+                                <div className="stat-cell">
+                                    <span className="stat-label">Average Score</span>
+                                    <span className="stat-value">{profile.average_score.toFixed(1)}</span>
+                                </div>
+                                <div className="stat-cell">
+                                    <span className="stat-label">Last Played</span>
+                                    <span className="stat-value">
+                                        {profile.last_played ? new Date(profile.last_played).toLocaleDateString() : 'Never'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {/* Working ahead of what a statistics section could look like */}
-                {/* <div className="stats-container">
-                    <h3>Game Statistics</h3>
-                    <div className="stats-grid">
-                        <div className="stat-item">
-                            <span className="stat-label">Games Played</span>
-                            <span className="stat-value">{profile.games_played}</span>
-                        </div>
-                        <div className="stat-item">
-                            <span className="stat-label">Games Won</span>
-                            <span className="stat-value">{profile.games_won || 0}</span>
-                        </div>
-                        <div className="stat-item">
-                                <span className="stat-label">Win Rate</span>
-                                <span className="stat-value">{profile.win_rate.toFixed(1)}%</span>
-                        </div>
-                    </div> 
-                </div> */}
             </div>
-        </div>
-    );
-}
+        );
+    }
