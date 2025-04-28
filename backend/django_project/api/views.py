@@ -105,7 +105,7 @@ def get_scrambled_article(request):
     if request: # Dummy usage
         pass
     
-    return JsonResponse(utils.get_user_article(0)) # 0 is TESTING placeholder for user id
+    return JsonResponse(utils.get_user_article(2)) # 2 is TESTING placeholder for user id
 
 
 @api_view(['GET'])
@@ -127,7 +127,7 @@ def get_guess_scoreboard(request):
     """
     if request: # Dummy usage
         pass
-    return JsonResponse(utils.get_user_scores(0)) # 0 is TESTING placeholder for user id
+    return JsonResponse(utils.get_user_scores(2)) # 2 is TESTING placeholder for user id
 
 
 @api_view(['GET'])
@@ -172,7 +172,7 @@ def process_guess(request):
     guess = request.data.get('guess')
     if guess:
         print("Received guess: " + guess)
-        utils.process_guess(0, guess)
+        utils.process_guess(2, guess)
     else:
         print("Unable to parse guess")
 
