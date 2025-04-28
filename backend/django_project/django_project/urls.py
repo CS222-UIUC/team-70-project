@@ -20,5 +20,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include("allauth.urls")),
     path("api/", include("api.urls")),
-
+    path('csrf/', views.csrf_token_view, name='csrf_token_view'),
+    path('signup/', views.signup_view, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('profile/', views.profile_view, name='profile'),
+    #path('update-stats/', views.update_game_stats, name='update_game_stats'),
 ]

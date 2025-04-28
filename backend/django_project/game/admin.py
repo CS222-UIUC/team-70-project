@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import ArticleCache, DailyArticle, GlobalLeaderboard
+from .models import UserProfile,DailyScore, ArticleCache, DailyArticle, GlobalLeaderboard
 
-
+admin.site.register(UserProfile)
+admin.site.register(DailyScore)
 @admin.register(ArticleCache)
 class ArticleCacheAdmin(admin.ModelAdmin):
     list_display = ("title", "article_id", "retrieved_date")
