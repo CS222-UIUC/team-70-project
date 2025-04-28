@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
+import ProfileNavbar from './ProfileNavbar';
 
 export function ProfilePage() {
     const [profile, setProfile] = useState(null);
@@ -71,6 +72,9 @@ export function ProfilePage() {
         );
     }    
         return (
+            <>
+            <ProfileNavbar/> 
+            <div classname = "page-container">
             <div className="profile-page">
                 <h1>Profile</h1>
                 <div className="profile-info">
@@ -123,5 +127,7 @@ export function ProfilePage() {
                     </div>
                 </div>
             </div>
+            </div>
+            </>
         );
     }

@@ -4,6 +4,8 @@ from django.middleware.csrf import get_token
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.utils import timezone
+from django.contrib.auth import logout
+
 from game.models import UserProfile
 import json
 
@@ -80,6 +82,11 @@ def login_view(request):
             return JsonResponse({"error": str(e)}, status=500)
             
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({'message': 'Logged out'})
+
 # def update_game_stats(request):
 #     if request.method == 'POST' and request.user.is_authenticated:
 #         try:
