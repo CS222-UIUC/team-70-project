@@ -9,33 +9,17 @@ This module contains the functions for game logic and NLP libraries, supporting 
 
 import spacy
 import random
+from game.models import ArticleCache, DailyArticle, GameState, UserGuess
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 nlp = spacy.load("en_core_web_lg") # python -m spacy download en_core_web_lg
 FULL_THRESH = 0.55          # Absolute similarity threshold for a word to be completely unscrambled
-PARTIAL_THRESH = 0.4        # Partial similarity threshold for a word to be partially unscrambled
+PARTIAL_THRESH = 0.3        # Partial similarity threshold for a word to be partially unscrambled
 FULL_MULTIPLIER = 1         # Multiplier for full threshold reduction based on how close the guess is to title
 PARTIAL_MULTIPLIER = 1.5    # Mulitplier for partial threshold reduction based on how close the guess is to title
 WIN_THRESH = 0.95           # Threshold to pass to win the game
 PUNCT_THRESH = 2            # Length threshold for punctuation to be considered a word instead (for weird formattings)
-
-### TESTING VARIABLES ###
-test_title = "Lorem ipsum"
-test_text = '''
-Lorem ipsum (/ˌlɔː.rəm ˈɪp.səm/ LOR-əm IP-səm) is a dummy or placeholder text commonly used in graphic design, publishing, and web development. Its purpose is to permit a page layout to be designed, independently of the copy that will subsequently populate it, or to demonstrate various fonts of a typeface without meaningful text that could be distracting. \n
-
-Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin. The first two words themselves are a truncation of dolorem ipsum ("pain itself"). \n
-
-Versions of the Lorem ipsum text have been used in typesetting at least since the 1960s, when it was popularized by advertisements for Letraset transfer sheets.[1] Lorem ipsum was introduced to the digital world in the mid-1980s, when Aldus employed it in graphic and word-processing templates for its desktop publishing program PageMaker. Other popular word processors, including Pages and Microsoft Word, have since adopted Lorem ipsum,[2] as have many LaTeX packages,[3][4][5] web content managers such as Joomla! and WordPress, and CSS libraries such as Semantic UI.
-
-A common form of Lorem ipsum reads:
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-'''
-
-test_state = None     # Dictionary of str:str
-test_scores = {}    # Dicitonary of str:int
-
-### END TESTING VARS ###
 
 def get_daily_article():
     """
@@ -56,10 +40,21 @@ def get_daily_article():
         }
     }
     """
-    global test_text
-    return {
-        "main-text" : test_text
-    } # TESTING output (should access stored daily article)
+    # Get the name of the daily article from the database
+    article_title = get_daily_article_title()
+
+    # Use the name of the article to get the article data from the database
+    article_data = ArticleCache.objects.get(title=article_title)
+
+    # Return the article data in proper JSON format
+    output = {
+        "main-text" : article_data.content[:1000],       # Cap characters at 1000 for testing
+    }
+
+    if (len(article_data.image_urls) > 0):
+        output["image-url"] = article_data.image_urls[0]
+
+    return output
 
 def get_daily_article_title():
     """
@@ -67,8 +62,10 @@ def get_daily_article_title():
 
     For UTIL use, NOT USER.
     """
-    global test_title
-    return test_title # TESTING output (should access stored daily article)
+    today = timezone.now().date()
+    daily_article = DailyArticle.objects.get(date=today)
+    title = daily_article.article.title
+    return title
 
 def get_user_article(user_id):
     """
@@ -92,33 +89,58 @@ def get_user_article(user_id):
         }
     }
     """
-    global test_state
-    if (user_id): # Dummy usage of user_id for now
-        pass 
+    user = User.objects.get(id=user_id)
 
     # Access user state
-    user_state = test_state
-
-    # If user has no initialized game, initialize a game for them and update database
-    if not user_state: # ALL TESTING BEHAVIOR CURRENTLY
+    game_state = None
+    try: # Look into logic further later
+        game_state = GameState.objects.get(user=user)
+    except:
+        # User has no initialized game, initialize a game for them and update database
         print("LOG: Generating game for UID: " + str(user_id))
         article_text = get_daily_article()["main-text"]
-        user_state = generate_game(article_text) # TESTING behavior
-        init_random(user_state, get_letter_bag(article_text))
-        test_state = user_state
+        new_state = generate_game(article_text) # TESTING behavior
+        init_random(new_state, get_letter_bag(article_text))
 
-    #print("----- CURRENT USER STATE -----")
-    #print(user_state)
-    #print("------------------------------")
+        # Create new game state
+        GameState.objects.create(
+            user=user,
+            article=ArticleCache.objects.get(title=get_daily_article_title()),
+            word_mapping=new_state
+        )
+        game_state = GameState.objects.get(user=user)
+
+    # IF ARTICLE HAS CHANGED, FLUSH ALL CURRENT STATE AND SCORES FOR USER AND CREATE NEW GAME STATE
+    if (get_daily_article_title() != game_state.article.title):
+        print("LOG: Article has changed, flushing state and scores for UID: " + str(user_id))
+        game_state.delete()
+        game_state = None
+
+        # Create new game state
+        # We can consider keeping the game state in the database later for the user to track progress in a more detailed manner
+        print("LOG: Generating game for UID: " + str(user_id))
+        article_text = get_daily_article()["main-text"]
+        new_state = generate_game(article_text) # TESTING behavior
+        init_random(new_state, get_letter_bag(article_text))
+
+        GameState.objects.create(
+            user=user,
+            article=ArticleCache.objects.get(title=get_daily_article_title()),
+            word_mapping=new_state
+        )
+        game_state = GameState.objects.get(user=user)
         
     # Scramble output text based on state
+    user_state = game_state.word_mapping
     maintext_out = stringify_state(get_daily_article()["main-text"], user_state)
+
+    # Format output
+    article_out = get_daily_article()
+    article_out["main-text"] = maintext_out
 
     return {
         "request": "get_scrambled_article",
-        "article": {
-            "main-text" : maintext_out
-        }
+        "article": article_out
     }
 
 def get_user_scores(user_id):
@@ -137,16 +159,20 @@ def get_user_scores(user_id):
         }
     }
     """
-    global test_scores
-    if (user_id): # Dummy usage of user_id for now
-        pass 
+    user = User.objects.get(id=user_id)
 
     # Acess user scores
-    user_scores = test_scores # TESTING behavior
+    scores = {}
+    try:
+        user_state = GameState.objects.get(user=user)
+        for guess in user_state.guesses.all():
+            scores[guess.guess_text] = guess.score
+    except:
+        pass
 
     return {
         "request" : "get_guess_scoreboard",
-        "scores" : user_scores
+        "scores" : scores
     }
 
 def process_guess(user_id, guess: str):
@@ -155,27 +181,37 @@ def process_guess(user_id, guess: str):
 
     For UTIL use, NOT USER.
     """
-    global test_state, test_scores
-    print("Processing guess: " + guess + " for " + str(user_id))
+    print("Processing guess: " + guess + " for id = " + str(user_id))
     
     # Acess user state and scores
-    user_state = test_state     # TESTING input (should access stored state dict)
-    user_scores = test_scores   # TESTING input (should access stored scores dict)
+    user = User.objects.get(id=user_id)
+    user_state = GameState.objects.get(user=user).word_mapping
+    user_scores = {}
+    try:
+        for guess in user_state.guesses.all():
+            user_scores[guess.guess_text] = guess.score
+    except:
+        pass
 
     # Update user state and scores with game logic
-    score = guess_update(user_state, guess, get_daily_article_title()) * 1000
+    similarity = guess_update(user_state, guess, get_daily_article_title())
+    score = similarity * 1000
     score = int(score)
     print("Score: " + str(score))
     if score < 0:
         score = 0
     user_scores[guess] = score
 
+    
     print("New state:")
     print(user_state)
 
+
     # Update database with new state and scores
-    test_state = user_state     # TESTING behavior
-    test_scores = user_scores   # TESTING behavior
+    game_state = GameState.objects.get(user=user)
+    game_state.word_mapping = user_state # Update wordmapping in database
+    game_state.save()
+    UserGuess.objects.create(game_state=game_state, guess_text=guess, score=score, similarity_score=similarity) # Add a guess
 
 ##### SCRAMBLING/UNSCRAMBLING LOGIC #####
 def generate_game(text: str, game_state: dict = {}):
