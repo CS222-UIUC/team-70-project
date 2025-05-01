@@ -200,3 +200,164 @@ class DisplayLeaderboardCommandTest(TestCase):
 
         # Check if output indicates empty data
         self.assertIn(f"Leaderboard data for {empty_date} is empty", output)
+
+    def test_display_leaderboard_update_suggestion(self):
+        """Test the command when leaderboard doesn't exist but scores do."""
+        # Create a date with scores but no leaderboard
+        future_date = self.today + timedelta(days=3)
+
+        # Create score for that date
+        DailyScore.objects.create(
+            user=self.user1,
+            date=future_date,
+            score=800,
+            time_taken=110,
+            guesses=3,
+            completed=True,
+            article_title="Future Article",
+            hints_used=1
+        )
+
+        # Format the date for command argument
+        date_str = future_date.strftime('%Y-%m-%d')
+        output = self.call_command(date=date_str)
+
+        # Check if output suggests updating the leaderboard
+        self.assertIn(f"No leaderboard found for {future_date}", output)
+        self.assertIn("There are 1 score records for this date", output)
+        self.assertIn(f"Run 'python manage.py update_leaderboard --date={future_date}'", output)
+
+    def test_display_leaderboard_no_scores(self):
+        """Test the command when neither leaderboard nor scores exist."""
+        # Create a date with no data
+        empty_date = self.today + timedelta(days=5)
+        date_str = empty_date.strftime('%Y-%m-%d')
+        output = self.call_command(date=date_str)
+
+        # Check if output indicates no scores
+        self.assertIn(f"No leaderboard found for {empty_date}", output)
+        self.assertIn("No score records found for this date.", output)
+
+    def test_display_leaderboard_with_empty_scores(self):
+        """Test the command with a leaderboard that has an empty scores list."""
+        # Create leaderboard with empty scores list
+        empty_scores_date = self.today - timedelta(days=3)
+        GlobalLeaderboard.objects.create(
+            date=empty_scores_date,
+            leaderboard_data={
+                'scores': [],
+                'total_players': 0,
+                'average_score': 0,
+            }
+        )
+
+        date_str = empty_scores_date.strftime('%Y-%m-%d')
+        output = self.call_command(date=date_str)
+
+        # Check if output indicates empty scores list
+        self.assertIn(f"Leaderboard for {empty_scores_date} doesn't contain any scores", output)
+
+    def test_display_leaderboard_time_format_hours(self):
+        """Test the time formatting with hours."""
+        # Create a score with more than an hour of play time
+        long_time_date = self.today - timedelta(days=4)
+        long_time_user = User.objects.create_user(username='longtime', password='password123')
+
+        DailyScore.objects.create(
+            user=long_time_user,
+            date=long_time_date,
+            score=500,
+            time_taken=3725,  # 1h 2m 5s
+            guesses=10,
+            completed=True,
+            article_title="Long Time Article",
+            hints_used=5
+        )
+
+        # Create leaderboard with this data
+        GlobalLeaderboard.objects.create(
+            date=long_time_date,
+            leaderboard_data={
+                'scores': [
+                    {'rank': 1, 'username': 'longtime', 'score': 500, 'guesses': 10, 'time_taken': 3725},
+                ],
+                'total_players': 1,
+                'average_score': 500.0,
+            }
+        )
+
+        date_str = long_time_date.strftime('%Y-%m-%d')
+        output = self.call_command(date=date_str)
+
+        # Check if hours format appears in output
+        self.assertIn("1h 2m 5s", output)
+
+    def test_display_leaderboard_time_format_minutes(self):
+        """Test the time formatting with minutes but no hours."""
+        # Create a score with minutes
+        mid_time_date = self.today - timedelta(days=5)
+        mid_time_user = User.objects.create_user(username='midtime', password='password123')
+
+        DailyScore.objects.create(
+            user=mid_time_user,
+            date=mid_time_date,
+            score=700,
+            time_taken=125,  # 2m 5s
+            guesses=5,
+            completed=True,
+            article_title="Mid Time Article",
+            hints_used=2
+        )
+
+        # Create leaderboard with this data
+        GlobalLeaderboard.objects.create(
+            date=mid_time_date,
+            leaderboard_data={
+                'scores': [
+                    {'rank': 1, 'username': 'midtime', 'score': 700, 'guesses': 5, 'time_taken': 125},
+                ],
+                'total_players': 1,
+                'average_score': 700.0,
+            }
+        )
+
+        date_str = mid_time_date.strftime('%Y-%m-%d')
+        output = self.call_command(date=date_str)
+
+        # Check if minutes format appears in output
+        self.assertIn("2m 5s", output)
+
+    def test_display_leaderboard_time_format_seconds_only(self):
+        """Test the time formatting with seconds only."""
+        # Create a score with just seconds
+        seconds_only_date = self.today - timedelta(days=6)
+        seconds_only_user = User.objects.create_user(username='quickuser', password='password123')
+
+        DailyScore.objects.create(
+            user=seconds_only_user,
+            date=seconds_only_date,
+            score=950,
+            time_taken=45,  # 45s
+            guesses=1,
+            completed=True,
+            article_title="Quick Solve Article",
+            hints_used=0
+        )
+
+        # Create leaderboard with this data
+        GlobalLeaderboard.objects.create(
+            date=seconds_only_date,
+            leaderboard_data={
+                'scores': [
+                    {'rank': 1, 'username': 'quickuser', 'score': 950, 'guesses': 1, 'time_taken': 45},
+                ],
+                'total_players': 1,
+                'average_score': 950.0,
+            }
+        )
+
+        date_str = seconds_only_date.strftime('%Y-%m-%d')
+        output = self.call_command(date=date_str)
+
+        # Check if seconds-only format appears in output
+        self.assertIn("45s", output)

@@ -6,6 +6,7 @@ omit =
     */wsgi.py
     */migrations/*
     */settings.py
+    */tests/*
 
 [report]
 omit = 
@@ -13,3 +14,4 @@ omit =
     */wsgi.py
     */migrations/*
     */settings.py
+    */tests/*

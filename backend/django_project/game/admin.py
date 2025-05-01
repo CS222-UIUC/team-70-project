@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import UserProfile,DailyScore, ArticleCache, DailyArticle, GlobalLeaderboard
+from .models import UserProfile, DailyScore, ArticleCache, DailyArticle, GlobalLeaderboard
 
 admin.site.register(UserProfile)
 admin.site.register(DailyScore)
+
+
 @admin.register(ArticleCache)
 class ArticleCacheAdmin(admin.ModelAdmin):
     list_display = ("title", "article_id", "retrieved_date")
@@ -12,13 +14,8 @@ class ArticleCacheAdmin(admin.ModelAdmin):
 
 @admin.register(DailyArticle)
 class DailyArticleAdmin(admin.ModelAdmin):
-    list_display = ("date", "get_article_title", "created_at")
+    list_display = ("date", "article__title", "created_at")
     list_filter = ("date",)
-
-    def get_article_title(self, obj):
-        return obj.article.title if obj.article else "NO title"
-
-    get_article_title.short_description = "title"
 
 
 @admin.register(GlobalLeaderboard)
