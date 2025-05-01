@@ -74,7 +74,7 @@ export function ProfilePage() {
         return (
             <>
             <ProfileNavbar/> 
-            <div classname = "page-container">
+            <div className = "page-container">
             <div className="profile-page">
                 <h1>Profile</h1>
                 <div className="profile-info">
