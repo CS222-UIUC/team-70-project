@@ -31,7 +31,9 @@ function ArticleDisplay() {
     const defaultText = `
     Loading Article Data...
 
-    Please reload if the page does not respond.
+    Please make sure you are logged in.
+
+    Reload if the page continues to not respond.
     `;
 
     // Get the main text or use the default
