@@ -7,9 +7,10 @@ import {ProfilePage} from './Components/ProfilePage/ProfilePage';
 import IndexPage from './Components/IndexPage/IndexPage';
 import Login from './Components/Login/Login';
 import Signup from './Components/Signup/Signup';
-
+import { AuthProvider } from './Components/UseAuth';
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Routes>
         <Route path="/"         element={ <IndexPage />   } />
@@ -18,6 +19,7 @@ function App() {
         <Route path="/profile"  element={ <ProfilePage /> } />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../UseAuth';
 import './Login.css';
 
 function Login() {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [csrfToken, setCsrfToken] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useAuth();  // ✅ useAuth comes early
 
   // Fetch CSRF token
   useEffect(() => {
     axios.get('http://localhost:8000/csrf/', { withCredentials: true })
       .then(response => {
-        console.log('CSRF response:', response.data);
         const token = response.data.csrfToken;
         setCsrfToken(token);
-        console.log('CSRF token set:', token);
       })
       .catch(error => {
         console.error('Error fetching CSRF token:', error);
@@ -28,14 +25,13 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!csrfToken) {
       setError('CSRF token not available. Please refresh the page and try again.');
       return;
     }
-    
+
     try {
-      console.log('Submitting with CSRF token:', csrfToken);
       const response = await axios.post('http://localhost:8000/login/', formData, {
         headers: {
           'Content-Type': 'application/json',
@@ -43,9 +39,10 @@ function Login() {
         },
         withCredentials: true
       });
-      
+
       if (response.status === 200) {
-        navigate('/profile'); // Redirect to profile page after successful login
+        setUser(response.data); // ✅ Set user in context
+        navigate('/profile');
       }
     } catch (error) {
       setError('Invalid credentials. Please try again.');
@@ -53,14 +50,6 @@ function Login() {
     }
   };
 
-  // Utility function to get CSRF token from cookies
-  // function getCookie(name) {
-  //   const value = `; ${document.cookie}`;
-  //   const parts = value.split(`; ${name}=`);
-  //   if (parts.length === 2) return parts.pop().split(';').shift();
-  // }
-
-  // page render function
   return (
     <div className="login-container">
       <h2>Login</h2>
@@ -72,7 +61,7 @@ function Login() {
             type="text"
             id="username"
             value={formData.username}
-            onChange={(e) => setFormData({...formData, username: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             required
           />
         </div>
@@ -82,7 +71,7 @@ function Login() {
             type="password"
             id="password"
             value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
         </div>
