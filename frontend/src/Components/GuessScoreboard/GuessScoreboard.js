@@ -30,7 +30,8 @@ function GuessScoreboard() {
             try {
                 console.log(`Attempting to Fetch Guess Scoreboard: ${API_BASE_URL}guess_scoreboard/`);
                 const response = await fetch(`${API_BASE_URL}guess_scoreboard/`, {
-                    withCredentials: true,
+                    method: 'GET', // Specify the method if needed
+                    credentials: 'include', // This ensures cookies are sent
                     headers: {
                         'X-CSRFToken': csrfToken,
                     }

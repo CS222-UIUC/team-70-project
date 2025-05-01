@@ -31,7 +31,8 @@ function ArticleDisplay() {
             try {
                 console.log(`Attempting to Fetch Article: ${API_BASE_URL}scrambled_article/`);
                 const response = await fetch(`${API_BASE_URL}scrambled_article/`, {
-                    withCredentials: true,
+                    method: 'GET', // Specify the method if needed
+                    credentials: 'include', // This ensures cookies are sent
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': csrfToken,

@@ -31,7 +31,8 @@ function FriendScoreboard() {
             try {
                 console.log(`Attempting to Fetch Friend Scoreboard: ${API_BASE_URL}friend_scoreboard/`);
                 const response = await fetch(`${API_BASE_URL}friend_scoreboard/`, {
-                    withCredentials: true,
+                    method: 'GET', // Specify the method if needed
+                    credentials: 'include', // This ensures cookies are sent
                     headers: {
                         'X-CSRFToken': csrfToken,
                     }
