@@ -15,6 +15,11 @@ def profile_view(request):
                 return JsonResponse({"error": "Unauthorized"}, status=401)
 
         user = request.user
+        print("profile_view request for user: " + str(user.id))
+        print(user.__dict__)
+        # Log the session ID
+        session_id = request.COOKIES.get('sessionid')
+        print("Session ID:", session_id)  # This will print to the console or log file
         profile = user.profile
         win_rate = 0
         if profile.total_games_played > 0:

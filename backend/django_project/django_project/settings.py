@@ -65,10 +65,12 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React app
+    "http://localhost:8000",  # Other React app
 ]
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # React app
+    "http://localhost:8000",  # Other React app
 ]
 # django-allauth configurations
 AUTHENTICATION_BACKENDS = [
