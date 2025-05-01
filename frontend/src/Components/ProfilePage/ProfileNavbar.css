@@ -1,12 +1,12 @@
-.navbar {
+.ProfileNavbar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 1600px;
-    margin: 0px auto;
-    padding: 10px 2.75rem;
     background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 10px 0;
 }
 
 .title {
@@ -27,21 +27,6 @@
     color: #36c;
     font-size: 16px;
 }
-.nav-link.logout-button {
-    background: none;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    color: #36c;
-    text-decoration: underline;
-  }
-  
-  /* Optional: Hover effect to match <a> links */
-  .nav-link.logout-button:hover {
-    text-decoration: underline;
-    color: #1a4db3;
-  }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

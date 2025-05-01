@@ -7,6 +7,11 @@
     margin: 0 auto;
 }
 
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .profile-info {
     width: 100%;
     background-color: #f9f9f9;
