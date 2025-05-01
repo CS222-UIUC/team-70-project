@@ -79,6 +79,7 @@ def get_user_info(request):
     return JsonResponse(user_info)
 
 
+@login_required
 @api_view(['GET'])
 def get_scrambled_article(request):
     """
@@ -108,6 +109,7 @@ def get_scrambled_article(request):
     return JsonResponse(utils.get_user_article(2)) # 2 is TESTING placeholder for user id
 
 
+@login_required
 @api_view(['GET'])
 def get_guess_scoreboard(request):
     """
@@ -130,6 +132,7 @@ def get_guess_scoreboard(request):
     return JsonResponse(utils.get_user_scores(2)) # 2 is TESTING placeholder for user id
 
 
+@login_required
 @api_view(['GET'])
 def get_friend_scoreboard(request):
     """
@@ -159,6 +162,7 @@ def get_friend_scoreboard(request):
     return JsonResponse(response_data)
 
 
+@login_required
 @api_view(['POST'])
 def process_guess(request):
     """
