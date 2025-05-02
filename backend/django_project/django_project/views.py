@@ -64,8 +64,10 @@ def signup_view(request):
 
 @ensure_csrf_cookie
 def csrf_token_view(request):
-    response = JsonResponse({'csrfToken': get_token(request)})
-    response.set_cookie('csrftoken', get_token(request), samesite='Lax', secure=False)
+    token = get_token(request)
+    print("CSRF token:", token)
+    response = JsonResponse({'csrfToken': token})
+    response.set_cookie('csrftoken', token, samesite='none', secure=False)
     return response
 
 def login_view(request):
