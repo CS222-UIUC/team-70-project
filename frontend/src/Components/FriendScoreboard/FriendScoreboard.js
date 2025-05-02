@@ -1,41 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './FriendScoreboard.css';
-import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Access the environment variable
 
 function FriendScoreboard() {
     const [scores, setScores] = useState({}); // State to hold the scores
-    const [csrfToken, setCsrfToken] = useState('');
-
-    // Fetch CSRF token
-    useEffect(() => {
-        axios.get('http://localhost:8000/csrf/', { withCredentials: true })
-            .then(response => {
-                console.log('CSRF response:', response.data);
-                const token = response.data.csrfToken;
-                setCsrfToken(token);
-                console.log('CSRF token set:', token);
-            })
-            .catch(error => {
-                console.error('Error fetching CSRF token:', error);
-            });
-    }, []);
-
+    
     useEffect(() => {
         const fetchScores = async () => {
-            if (!csrfToken) {
-                return; // Wait for CSRF token
-            }
-
             try {
                 console.log(`Attempting to Fetch Friend Scoreboard: ${API_BASE_URL}friend_scoreboard/`);
                 const response = await fetch(`${API_BASE_URL}friend_scoreboard/`, {
                     method: 'GET', // Specify the method if needed
                     credentials: 'include', // This ensures cookies are sent
-                    headers: {
-                        'X-CSRFToken': csrfToken,
-                    }
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -51,7 +28,7 @@ function FriendScoreboard() {
         };
 
         fetchScores(); // Call the fetch function
-    }, [csrfToken]); // Runs when CSRF token is updated
+    }, []); // Runs when CSRF token is updated
 
     return (
         <div className = "friend-scoreboard">

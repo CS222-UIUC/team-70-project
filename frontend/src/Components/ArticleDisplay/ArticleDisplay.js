@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './ArticleDisplay.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Access the environment variable
@@ -9,7 +8,6 @@ function ArticleDisplay() {
 
     useEffect(() => {
         const fetchArticle = async () => {
-
             try {
                 console.log(`Attempting to Fetch Article: ${API_BASE_URL}scrambled_article/`);
                 const response = await fetch(`${API_BASE_URL}scrambled_article/`, {
