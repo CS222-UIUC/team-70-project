@@ -14,6 +14,7 @@ class ApiViewsTestCase(APITestCase):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.client.login(username='testuser', password='testpassword')
 
+    
     def test_example_view_get(self):
         """Test the example_view with GET request."""
         url = reverse('example_view')  # Ensure this matches the name in your urls.py
