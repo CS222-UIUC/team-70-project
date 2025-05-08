@@ -15,6 +15,11 @@ def profile_view(request):
                 return JsonResponse({"error": "Unauthorized"}, status=401)
 
         user = request.user
+        print("profile_view request for user: " + str(user.id))
+        print(user.__dict__)
+        # Log the session ID
+        session_id = request.COOKIES.get('sessionid')
+        print("Session ID:", session_id)  # This will print to the console or log file
         profile = user.profile
         win_rate = 0
         if profile.total_games_played > 0:
@@ -59,8 +64,10 @@ def signup_view(request):
 
 @ensure_csrf_cookie
 def csrf_token_view(request):
-    response = JsonResponse({'csrfToken': get_token(request)})
-    response.set_cookie('csrftoken', get_token(request), samesite='Lax', secure=False)
+    token = get_token(request)
+    print("CSRF token:", token)
+    response = JsonResponse({'csrfToken': token})
+    response.set_cookie('csrftoken', token, samesite='none', secure=False)
     return response
 
 def login_view(request):

@@ -27,7 +27,10 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -65,10 +68,14 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React app
+    "http://localhost:8000",  # Django app
+    "http://127.0.0.1:8000",  # Django app
 ]
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # React app
+    "http://localhost:8000",  # Django app
+    "http://127.0.0.1:8000",  # Django app
 ]
 # django-allauth configurations
 AUTHENTICATION_BACKENDS = [

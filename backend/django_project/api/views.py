@@ -8,7 +8,9 @@ bridge between the models and templates.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # from rest_framework import status
-from allauth.account.decorators import login_required
+# from allauth.account.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 from django.http import JsonResponse
 from . import utils
 # IMPORT MODEL FROM DATABASE (IF NEEDED)
@@ -50,7 +52,6 @@ def example_view(request):
     return Response(response_data)
 
 ### API PATHS ###
-@login_required
 @api_view(['GET'])
 def get_user_info(request):
     """
@@ -67,6 +68,13 @@ def get_user_info(request):
     """
     user = request.user  # Access the authenticated user
 
+    print(user)
+
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    print("get_user_info request for user: " + str(user.id))
+
     # Prepare user information to return
     user_info = {
         "id": user.id,
@@ -77,7 +85,6 @@ def get_user_info(request):
     }
 
     return JsonResponse(user_info)
-
 
 @api_view(['GET'])
 def get_scrambled_article(request):
@@ -102,10 +109,25 @@ def get_scrambled_article(request):
         }
     }
     """
-    if request: # Dummy usage
-        pass
+    user = request.user  # Access the authenticated user
+
+    token = get_token(request)
+
+    print(user)
+
+    print(token)
+
+    # Log the session ID
+    session_id = request.COOKIES.get('sessionid')
+    print("Session ID Article:", session_id)  # This will print to the console or log file
+        
+
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    print("get_scrambled_article request for user: " + str(user.id))
     
-    return JsonResponse(utils.get_user_article(2)) # 2 is TESTING placeholder for user id
+    return JsonResponse(utils.get_user_article(user.id))
 
 
 @api_view(['GET'])
@@ -125,9 +147,14 @@ def get_guess_scoreboard(request):
         }
     }
     """
-    if request: # Dummy usage
-        pass
-    return JsonResponse(utils.get_user_scores(2)) # 2 is TESTING placeholder for user id
+    user = request.user  # Access the authenticated user
+
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    print("get_guess_scoreboard request for user: " + str(user.id))
+
+    return JsonResponse(utils.get_user_scores(user.id))
 
 
 @api_view(['GET'])
@@ -147,8 +174,14 @@ def get_friend_scoreboard(request):
         }
     }
     """
-    if request: # Dummy usage
-        pass
+    user = request.user  # Access the authenticated user
+
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    print("get_friend_scoreboard request for user: " + str(user.id))
+
+    # NOT IMPLEMENTED: THIS FEATURE WILL LIKELY BE CUT
     
     # Prepare the response data
     response_data = {
@@ -168,11 +201,15 @@ def process_guess(request):
 
     request must contain field "token" and "guess"
     """
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
     # Read guess parameter from post
     guess = request.data.get('guess')
     if guess:
-        print("Received guess: " + guess)
-        utils.process_guess(2, guess)
+        user = request.user  # Access the authenticated user
+        print("Received guess: " + guess + " for user: " + str(user.id))
+        utils.process_guess(user.id, guess)
     else:
         print("Unable to parse guess")
 

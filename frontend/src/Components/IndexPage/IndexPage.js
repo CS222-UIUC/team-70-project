@@ -5,12 +5,28 @@ import GuessScoreboard from '../GuessScoreboard/GuessScoreboard';
 import FriendScoreboard from '../FriendScoreboard/FriendScoreboard';
 import ArticleDisplay from '../ArticleDisplay/ArticleDisplay';
 import VirtualKeyboard from '../Keyboard/keyboard.js';
+import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function IndexPage() {
     const [inputValue, setInputValue] = useState("");
     const textInputRef = useRef(null);
+    const [csrfToken, setCsrfToken] = useState('');
+
+    // Fetch CSRF token
+    useEffect(() => {
+        axios.get('http://localhost:8000/csrf/', { withCredentials: true })
+            .then(response => {
+                console.log('CSRF response:', response.data);
+                const token = response.data.csrfToken;
+                setCsrfToken(token);
+                console.log('CSRF token set:', token);
+            })
+            .catch(error => {
+                console.error('Error fetching CSRF token:', error);
+            });
+    }, []);
 
     useEffect(() => {
         if (textInputRef.current) {
@@ -70,8 +86,10 @@ function IndexPage() {
             const data = { 'guess': trimmedInputValue };
             fetch(url, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
                 },
                 body: JSON.stringify(data),
             })
