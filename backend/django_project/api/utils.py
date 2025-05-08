@@ -316,6 +316,17 @@ def user_finished_game(user_id):
     # Otherwise, they have not finished the game
     return False, 0
 
+def get_game_over(user_id):
+    """
+    get_game_over returns whether or not the game is over, and if so, the user's score and the article title
+
+    For API/USER use.
+    """
+    # TODO
+
+    return
+    
+
 ##### SCRAMBLING/UNSCRAMBLING LOGIC #####
 def generate_game(text: str, game_state: dict = {}):
     """
