@@ -5,12 +5,15 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL; // Access the environme
 
 function FriendScoreboard() {
     const [scores, setScores] = useState({}); // State to hold the scores
-
+    
     useEffect(() => {
         const fetchScores = async () => {
             try {
                 console.log(`Attempting to Fetch Friend Scoreboard: ${API_BASE_URL}friend_scoreboard/`);
-                const response = await fetch(`${API_BASE_URL}friend_scoreboard/`);
+                const response = await fetch(`${API_BASE_URL}friend_scoreboard/`, {
+                    method: 'GET', // Specify the method if needed
+                    credentials: 'include', // This ensures cookies are sent
+                });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -25,7 +28,7 @@ function FriendScoreboard() {
         };
 
         fetchScores(); // Call the fetch function
-    }, []); // Empty dependency array means this runs once on mount
+    }, []); // Runs when CSRF token is updated
 
     return (
         <div className = "friend-scoreboard">
