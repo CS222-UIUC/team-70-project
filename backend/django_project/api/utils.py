@@ -295,6 +295,7 @@ def user_finished_game(user_id):
 
     For UTIL use, NOT USER.
     """
+    print("DEBUG: Checking if user has finished game for id: " + str(user_id))
     user = User.objects.get(id=user_id)
     game_state = GameState.objects.get(user=user)
     user_scores = {}
@@ -311,7 +312,7 @@ def user_finished_game(user_id):
 
     # Check if user hit maximum number of guesses
     if len(user_scores) >= MAX_GUESSES:
-        return True, user_scores[list(user_scores.keys())[-1]]
+        return True, max(user_scores.values())
 
     # Otherwise, they have not finished the game
     return False, 0
@@ -336,6 +337,8 @@ def get_game_over(user_id):
     if not game_over:                                   # If game is not over, set score and title to empty strings
         score = ""
         title = ""
+
+    print("DEBUG: game_over: " + str(game_over) + ", score: " + score + ", title: " + title)
 
     return {
         "request" : "get_game_over",

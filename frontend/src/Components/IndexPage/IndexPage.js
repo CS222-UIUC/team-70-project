@@ -13,6 +13,51 @@ function IndexPage() {
     const [inputValue, setInputValue] = useState("");
     const textInputRef = useRef(null);
     const [csrfToken, setCsrfToken] = useState('');
+    const [finalScore, setFinalScore] = useState("");
+    const [finalTitle, setFinalTitle] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+
+    // Fetch game over status, score, and title
+    useEffect(() => {
+        axios.get(`${API_BASE_URL}game_over/`, { withCredentials: true })
+            .then(response => {
+                console.log('Game over response:', response.data);
+                setFinalScore(response.data.score);
+                setFinalTitle(response.data.title);
+
+                if (response.data.game_over) {
+                    setShowModal(true);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching game over status:', error);
+            });
+    }, []);
+
+    // Modal Component for game over popup
+    const Modal = ({ message1, message2, onClose, isClosing }) => {
+        return (
+            <div className={`modal-overlay ${isClosing ? 'fade-out' : ''}`}>
+                <div className={`modal-content ${isClosing ? 'fade-out' : ''}`}>
+                    <h1>Game Over!</h1>
+                    <p>{message1}</p>
+                    <p>{message2}</p>
+                    <button onClick={onClose}>Close</button>
+                </div>
+            </div>
+        );
+    };
+
+    const handleCloseModal = () => {
+        console.log("Closing modal...");
+        setIsClosing(true); // Start the fade-out animation
+        setTimeout(() => {
+            console.log("Hiding modal...");
+            setShowModal(false); // Hide the modal after the fade-out animation
+            setIsClosing(false); // Reset closing state after the animation
+        }, 500); // Match this duration with the CSS transition duration
+    };
 
     // Fetch CSRF token
     useEffect(() => {
@@ -113,6 +158,13 @@ function IndexPage() {
     return (
         <div className = "index-page">
             <Navbar />
+
+            {showModal && <Modal 
+                message1={`The Article Title Was: ${finalTitle}`} 
+                message2={`Your Final Score Was: ${finalScore}`} 
+                onClose={handleCloseModal} 
+                isClosing={isClosing}
+            />}
 
             <div className = "game-container">
                 <GuessScoreboard />

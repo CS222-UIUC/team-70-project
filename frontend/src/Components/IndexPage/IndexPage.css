@@ -240,3 +240,62 @@ h3 {
         min-height: 0; /* Allow content to shrink */
     }
 }
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it appears above other content */
+    opacity: 1; /* Initial opacity */
+    transition: opacity 0.5s ease; /* Transition for fade effect */
+}
+
+.modal-overlay.fade-out {
+    opacity: 0; /* Fade out effect */
+}
+
+.modal-content {
+    background: white;
+    padding: 40px; /* Increased padding for more space */
+    border-radius: 5px;
+    text-align: center;
+    width: 80%; /* Set width to 80% of the viewport */
+    max-width: 600px; /* Set a maximum width */
+    min-height: 300px; /* Set a minimum height for the modal */
+    height: auto; /* Allow height to adjust based on content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
+    opacity: 1; /* Initial opacity */
+    transition: opacity 0.5s ease; /* Transition for fade effect */
+}
+
+.modal-content.fade-out {
+    opacity: 0; /* Fade out effect for content */
+}
+
+.modal-content button {
+    margin-top: 20px; /* Increased margin for better spacing */
+}
+
+.modal-content h1 {
+    font-size: 2rem; /* Set font size to 2rem */
+    margin-bottom: 3rem; /* Add space between h1 and p */
+}
+
+.modal-content p {
+    font-size: 1.2rem; /* Set font size to 1.2rem */
+    margin-bottom: 20px; /* Add space between p and button */
+}
+
+.modal-content button {
+    margin-top: 20px; /* Increased margin for better spacing */
+    max-width: 200px;
+}
+
+
