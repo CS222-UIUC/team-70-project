@@ -16,7 +16,6 @@ function IndexPage() {
     const [finalScore, setFinalScore] = useState("");
     const [finalTitle, setFinalTitle] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [isClosing, setIsClosing] = useState(false);
 
     // Fetch game over status, score, and title
     useEffect(() => {
@@ -32,14 +31,17 @@ function IndexPage() {
             })
             .catch(error => {
                 console.error('Error fetching game over status:', error);
+                setShowModal(false);
+                setFinalScore("");
+                setFinalTitle("");
             });
     }, []);
 
     // Modal Component for game over popup
-    const Modal = ({ message1, message2, onClose, isClosing }) => {
+    const Modal = ({ message1, message2, onClose }) => {
         return (
-            <div className={`modal-overlay ${isClosing ? 'fade-out' : ''}`}>
-                <div className={`modal-content ${isClosing ? 'fade-out' : ''}`}>
+            <div className={`modal-overlay fade-in`}>
+                <div className={`modal-content fade-in`}>
                     <h1>Game Over!</h1>
                     <p>{message1}</p>
                     <p>{message2}</p>
@@ -51,12 +53,7 @@ function IndexPage() {
 
     const handleCloseModal = () => {
         console.log("Closing modal...");
-        setIsClosing(true); // Start the fade-out animation
-        setTimeout(() => {
-            console.log("Hiding modal...");
-            setShowModal(false); // Hide the modal after the fade-out animation
-            setIsClosing(false); // Reset closing state after the animation
-        }, 500); // Match this duration with the CSS transition duration
+        setShowModal(false); // Hide the modal after the fade-out animation
     };
 
     // Fetch CSRF token
@@ -163,7 +160,6 @@ function IndexPage() {
                 message1={`The Article Title Was: ${finalTitle}`} 
                 message2={`Your Final Score Was: ${finalScore}`} 
                 onClose={handleCloseModal} 
-                isClosing={isClosing}
             />}
 
             <div className = "game-container">
