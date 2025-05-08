@@ -321,10 +321,29 @@ def get_game_over(user_id):
     get_game_over returns whether or not the game is over, and if so, the user's score and the article title
 
     For API/USER use.
-    """
-    # TODO
 
-    return
+    Format is JSON:
+    {
+        "request" : "get_game_over",
+        "game_over" : <bool>,
+        "score" : <final_score>, # empty if game is not over
+        "title" : <title>        # empty if game is not over
+    }
+    """
+    game_over, score = user_finished_game(user_id)      # Get game over status and score
+    score = str(score)                                  # Convert score to string
+    title = get_daily_article_title()                   # Get title of daily article    
+    if not game_over:                                   # If game is not over, set score and title to empty strings
+        score = ""
+        title = ""
+
+    return {
+        "request" : "get_game_over",
+        "game_over" : game_over,
+        "score" : score,
+        "title" : title
+    }
+
     
 
 ##### SCRAMBLING/UNSCRAMBLING LOGIC #####
