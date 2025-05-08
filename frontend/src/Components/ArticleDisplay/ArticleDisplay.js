@@ -7,10 +7,13 @@ function ArticleDisplay() {
     const [article, setArticle] = useState({}); // State to hold the article
 
     useEffect(() => {
-        const fetchScores = async () => {
+        const fetchArticle = async () => {
             try {
-                console.log(`Attempting to Fetch Guess Scoreboard: ${API_BASE_URL}scrambled_article/`);
-                const response = await fetch(`${API_BASE_URL}scrambled_article/`);
+                console.log(`Attempting to Fetch Article: ${API_BASE_URL}scrambled_article/`);
+                const response = await fetch(`${API_BASE_URL}scrambled_article/`, {
+                    method: 'GET', // Specify the method if needed
+                    credentials: 'include', // This ensures cookies are sent
+                });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -24,14 +27,16 @@ function ArticleDisplay() {
             }
         };
 
-        fetchScores(); // Call the fetch function
-    }, []); // Empty dependency array means this runs once on mount
+        fetchArticle(); // Call the fetch function
+    }, []); // Runs when CSRF token is updated
 
     // Default Lorem Ipsum text
     const defaultText = `
     Loading Article Data...
 
-    Please reload if the page does not respond.
+    Please make sure you are logged in.
+
+    Reload if the page continues to not respond.
     `;
 
     // Get the main text or use the default
