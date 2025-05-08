@@ -41,15 +41,6 @@
     "lint": "eslint . --fix --max-warnings=0",
     "jest": "react-scripts test --watchAll=false"
   },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.js"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
-    }
-  },
   "browserslist": {
     "production": [
       ">0.2%",
