@@ -1,12 +1,14 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
 import datetime
 import json
 import random
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
+from game.models import UserDevice, UserVerification
 
 from game.models import (
     UserProfile,
@@ -237,6 +239,39 @@ class DailyScoreModelTest(TestCase):
         # Expected score: 1000 - 500 (max time penalty) - 300 (max guess
         # penalty) - 200 (max hint penalty) = 0
         self.assertEqual(calculated_score, 0)
+
+    def test_calculate_score_time_penalty_cap(self):
+        """Test that time penalty is capped at 500."""
+        score = DailyScore.objects.create(
+            user=self.test_user, date=self.today,
+            time_taken=6000,  # 6000/10 = 600, should be capped at 500
+            guesses=1, hints_used=0, completed=True
+        )
+        # Expected: 1000 (base) - 500 (max time) - (1*50) - 0 = 450
+        self.assertEqual(score.calculate_score(), 450)
+
+    def test_calculate_score_guess_penalty_cap(self):
+        """Test that guess penalty is capped at 300."""
+        score = DailyScore.objects.create(
+            user=self.test_user, date=self.today,
+            time_taken=100,  # 100/10 = 10
+            guesses=10,    # 10*50 = 500, should be capped at 300
+            hints_used=0, completed=True
+        )
+        # Expected: 1000 (base) - 10 (time) - 300 (max guess) - 0 = 690
+        self.assertEqual(score.calculate_score(), 690)
+
+    def test_calculate_score_normal_penalties(self):
+        """Test penalties below the cap."""
+        score = DailyScore.objects.create(
+            user=self.test_user, date=self.today,
+            time_taken=2000,  # 2000/10 = 200 ( < 500)
+            guesses=3,     # 3*50 = 150 ( < 300)
+            hints_used=1,  # 1*40 = 40
+            completed=True
+        )
+        # Expected: 1000 - 200 - 150 - 40 = 610
+        self.assertEqual(score.calculate_score(), 610)
 
 
 class ArticleCacheModelTest(TestCase):
@@ -635,3 +670,49 @@ class UserGuessModelTest(TestCase):
 
         self.assertEqual(user_guess.score, 0)             # Default value
         self.assertEqual(user_guess.similarity_score, 0.0)  # Default value
+
+
+class UserDeviceModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = User.objects.create_user(username="testuser_ud", password="password")
+
+    def test_string_representation(self):
+        device_with_name = UserDevice.objects.create(
+            user=self.test_user,
+            device_name="My Phone",
+            device_type="mobile"
+        )
+        self.assertEqual(str(device_with_name), f"{self.test_user.username} - My Phone")
+
+        device_without_name = UserDevice.objects.create(
+            user=self.test_user,
+            device_name="",
+            device_type="tablet"
+        )
+        self.assertEqual(str(device_without_name), f"{self.test_user.username} - tablet")
+
+
+class UserVerificationModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.test_user = User.objects.create_user(username="testuser_uv", password="password")
+        now = timezone.now()
+        cls.expires_at = now + timedelta(days=1)
+
+    def test_string_representation(self):
+        verification_active = UserVerification.objects.create(
+            user=self.test_user,
+            purpose="email",
+            is_used=False,
+            expires_at=self.expires_at
+        )
+        self.assertEqual(str(verification_active), f"{self.test_user.username} - email - Active")
+
+        verification_used = UserVerification.objects.create(
+            user=self.test_user,
+            purpose="password",
+            is_used=True,
+            expires_at=self.expires_at
+        )
+        self.assertEqual(str(verification_used), f"{self.test_user.username} - password - Used")
