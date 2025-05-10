@@ -220,3 +220,20 @@ def process_guess(request):
     }
 
     return Response(response_data)
+
+@api_view(['GET'])
+def get_game_over(request):
+    """
+    get_game_over(request)
+
+    This function returns whether or not the game is over, and if so, the user's score and the article title
+    
+    """
+    user = request.user  # Access the authenticated user
+
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    print("get_game_over request for user: " + str(user.id))
+
+    return JsonResponse(utils.get_game_over(user.id))

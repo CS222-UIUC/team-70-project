@@ -11,6 +11,7 @@ from .views import (
     get_guess_scoreboard,
     get_friend_scoreboard,
     process_guess,
+    get_game_over,
     example_view
 )
 
@@ -35,6 +36,10 @@ urlpatterns = [
         'process_guess/',
         process_guess,
         name='process_guess'),
+    path(
+        'game_over/',
+        get_game_over,
+        name='game_over'),
     path(
         'example/',
         example_view,
