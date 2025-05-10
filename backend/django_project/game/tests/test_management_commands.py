@@ -191,3 +191,180 @@ class ManageArticlesCommandTest(TestCase):
         call_command("manage_articles", clear_all=True, stdout=out)
         self.assertEqual(ArticleCache.objects.count(), initial_count)
         self.assertIn("Aborted", out.getvalue())
+
+    def test_select_daily_article_failure(self):
+        """Test the case when selecting a daily article fails"""
+        with patch("game.article_service.ArticleService.ensure_daily_article") as mock_ensure_daily_article:
+            mock_ensure_daily_article.return_value = (None, False)
+
+            out = StringIO()
+            call_command("manage_articles", select_daily=True, stdout=out)
+
+            self.assertIn("Failed to select daily article", out.getvalue())
+
+    def test_list_articles_empty_cache(self):
+        """Test listing articles when the cache is empty"""
+        with patch("game.models.ArticleCache.objects") as mock_objects:
+            # Mock ArticleCache.objects.all() to return an empty queryset
+            mock_objects.all.return_value = MagicMock()
+            mock_objects.all.return_value.exists.return_value = False
+
+            out = StringIO()
+            call_command("manage_articles", list=True, stdout=out)
+
+            self.assertIn("No articles in cache", out.getvalue())
+
+    def test_clear_all_confirmed_with_daily(self):
+        """Test confirming to clear all articles and also removing daily article entries"""
+        with patch("builtins.input", side_effect=["y", "y"]):
+            with patch("game.models.DailyArticle.objects.all") as mock_daily_all:
+                with patch("game.models.ArticleCache.objects.all") as mock_article_all:
+                    # Setup mock for DailyArticle.objects.all().delete()
+                    mock_daily_queryset = MagicMock()
+                    mock_daily_all.return_value = mock_daily_queryset
+
+                    # Setup ArticleCache objects
+                    mock_article1 = MagicMock()
+                    mock_article1.title = "Article 1"
+                    mock_article1.article_id = "id1"
+
+                    mock_article2 = MagicMock()
+                    mock_article2.title = "Article 2"
+                    mock_article2.article_id = "id2"
+
+                    # Return the list of mock articles when iterating over queryset
+                    mock_article_all.return_value = [mock_article1, mock_article2]
+
+                    # Execute command
+                    out = StringIO()
+                    call_command("manage_articles", clear_all=True, stdout=out)
+
+                    # Verify the daily articles queryset's delete was called
+                    mock_daily_queryset.delete.assert_called_once()
+
+                    # Verify each article's delete method was called
+                    mock_article1.delete.assert_called_once()
+                    mock_article2.delete.assert_called_once()
+
+                    # Verify output messages
+                    self.assertIn("All DailyArticle entries removed", out.getvalue())
+                    self.assertIn("Deleted 2 articles from cache", out.getvalue())
+
+    def test_clear_all_confirmed_without_daily(self):
+        """Test confirming to clear all articles but not removing daily article entries"""
+        with patch("builtins.input", side_effect=["y", "n"]):
+            with patch("game.models.DailyArticle.objects.all") as mock_daily_all:
+                with patch("game.models.ArticleCache.objects.all") as mock_article_all:
+                    # Setup mock for DailyArticle.objects.all().delete()
+                    mock_daily_queryset = MagicMock()
+                    mock_daily_all.return_value = mock_daily_queryset
+
+                    # Setup ArticleCache objects
+                    mock_article1 = MagicMock()
+                    mock_article1.title = "Article 1"
+                    mock_article1.article_id = "id1"
+
+                    mock_article2 = MagicMock()
+                    mock_article2.title = "Article 2"
+                    mock_article2.article_id = "id2"
+
+                    # Return the list of mock articles when iterating over queryset
+                    mock_article_all.return_value = [mock_article1, mock_article2]
+
+                    # Execute command
+                    out = StringIO()
+                    call_command("manage_articles", clear_all=True, stdout=out)
+
+                    # Verify daily articles queryset's delete was NOT called
+                    mock_daily_queryset.delete.assert_not_called()
+
+                    # Verify each article's delete method was called
+                    mock_article1.delete.assert_called_once()
+                    mock_article2.delete.assert_called_once()
+
+                    # Verify output message
+                    self.assertIn("Deleted 2 articles from cache", out.getvalue())
+
+    def test_clear_all_protected_error(self):
+        """Test handling ProtectedError when deleting articles"""
+        from django.db.models import ProtectedError
+
+        with patch("builtins.input", side_effect=["y", "n"]):
+            with patch("game.models.DailyArticle.objects.all") as mock_daily_all:
+                with patch("game.models.ArticleCache.objects.all") as mock_article_all:
+                    # Setup mock for DailyArticle.objects.all()
+                    mock_daily_queryset = MagicMock()
+                    mock_daily_all.return_value = mock_daily_queryset
+
+                    # Setup ArticleCache objects
+                    mock_article1 = MagicMock()
+                    mock_article1.title = "Article 1"
+                    mock_article1.article_id = "id1"
+
+                    # This article will raise ProtectedError
+                    mock_article2 = MagicMock()
+                    mock_article2.title = "Protected Article"
+                    mock_article2.article_id = "protected_id"
+                    mock_article2.delete.side_effect = ProtectedError("Protected", None)
+
+                    # Return the list of mock articles when iterating over queryset
+                    mock_article_all.return_value = [mock_article1, mock_article2]
+
+                    # Execute command
+                    out = StringIO()
+                    call_command("manage_articles", clear_all=True, stdout=out)
+
+                    # Verify daily articles queryset's delete was NOT called
+                    mock_daily_queryset.delete.assert_not_called()
+
+                    # Verify regular article's delete method was called
+                    mock_article1.delete.assert_called_once()
+
+                    # Verify output contains warning about protected article
+                    self.assertIn("Skipped protected article", out.getvalue())
+                    self.assertIn("Protected Article", out.getvalue())
+                    self.assertIn("protected_id", out.getvalue())
+                    self.assertIn("Deleted 1 articles from cache", out.getvalue())
+
+    def test_select_daily_article_existing(self):
+        """Test selecting a daily article when one already exists for the date"""
+        # Create an article in the cache
+        article = ArticleCache.objects.create(
+            article_id="existing_article",
+            title="Existing Article",
+            content="Content"
+        )
+
+        # Create a daily article for today
+        today = timezone.now().date()
+        daily_article = MagicMock()
+        daily_article.article = article
+
+        with patch("game.article_service.ArticleService.ensure_daily_article") as mock_ensure:
+            # Return that the article exists but wasn't created
+            mock_ensure.return_value = (daily_article, False)
+
+            out = StringIO()
+            call_command("manage_articles", select_daily=True, stdout=out)
+
+            self.assertIn("already exists", out.getvalue())
+            self.assertIn("Existing Article", out.getvalue())
+
+    def test_show_article_with_images(self):
+        """Test showing article details with image URLs"""
+        # Create an article with image URLs
+        article = ArticleCache.objects.create(
+            article_id="image_article",
+            title="Article With Images",
+            content="Content with images",
+            image_urls=["http://example.com/image1.jpg", "http://example.com/image2.jpg"]
+        )
+
+        out = StringIO()
+        call_command("manage_articles", show="image_article", stdout=out)
+
+        output = out.getvalue()
+        self.assertIn("Article With Images", output)
+        self.assertIn("Images:", output)
+        self.assertIn("http://example.com/image1.jpg", output)
+        self.assertIn("http://example.com/image2.jpg", output)

@@ -116,24 +116,21 @@ class ArticleServiceTest(TestCase):
         self.assertEqual(deleted_count, 0)
         self.assertTrue(ArticleCache.objects.filter(article_id="a2").exists())
 
+    def test_get_daily_article_with_none_date(self):
+        """Explicitly test get_daily_article(None) to cover the None path"""
+        DailyArticle.objects.create(date=self.today, article=self.article1)
+        result = ArticleService.get_daily_article(None)
+        self.assertIsNotNone(result)
+        self.assertEqual(result.date, self.today)
 
-def test_get_daily_article_with_none_date(self):
-    """Explicitly test get_daily_article(None) to cover the None path"""
-    DailyArticle.objects.create(date=self.today, article=self.article1)
-    result = ArticleService.get_daily_article(None)
-    self.assertIsNotNone(result)
-    self.assertEqual(result.date, self.today)
+    def test_set_daily_article_with_none_date(self):
+        """Explicitly test set_daily_article(..., None) to cover default date"""
+        result = ArticleService.set_daily_article(self.article1, None)
+        self.assertEqual(result.date, self.today)
 
-
-def test_set_daily_article_with_none_date(self):
-    """Explicitly test set_daily_article(..., None) to cover default date"""
-    result = ArticleService.set_daily_article(self.article1, None)
-    self.assertEqual(result.date, self.today)
-
-
-def test_ensure_daily_article_with_none_date(self):
-    """Explicitly call ensure_daily_article(None) to trigger date defaulting"""
-    DailyArticle.objects.all().delete()
-    article, created = ArticleService.ensure_daily_article(None)
-    self.assertTrue(created)
-    self.assertEqual(article.date, self.today)
+    def test_ensure_daily_article_with_none_date(self):
+        """Explicitly call ensure_daily_article(None) to trigger date defaulting"""
+        DailyArticle.objects.all().delete()
+        article, created = ArticleService.ensure_daily_article(None)
+        self.assertTrue(created)
+        self.assertEqual(article.date, self.today)
