@@ -45,8 +45,6 @@ function IndexPage() {
             case "Tab":
                 setInputValue((prev) => prev + "\t");
                 break;
-            case "Enter":
-                setInputValue((prev) => prev + "\n");
                 break;
             case "Caps":
             case "Shift":
