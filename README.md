@@ -68,3 +68,68 @@ Andrew Chen (amc19): Full-stack work with backend and frontend integration + Wor
 Prasanna Premkumar (pp41): Frontend work with React web applicaiton + User authentication
 
 Xuanle Li (xuanlel2): Backend work with Django SQLlite database + Wikipedia API usage
+
+## Technical Details
+
+![Architecture Diagram](architecture.png)
+
+### Frontend
+Provides a UI for displaying and interacting with the game
+
+Built using the React library (Javascript)
+
+Interacts with the django server through API calls:
+
+* Requests game information to display
+* Requests user information to display
+* Sends user guesses to progress the game
+* Sends user authentication requests
+
+Contributors:
+* Prasanna - implemented the on-screen, user authentication, profile page, and API calls associated with user authentication
+* Andrew - created the main page for games and the API calls associated with game information
+
+### Django REST Server
+Provides the backend services in the form of API call responses
+
+Built using the Django framework (Python)
+
+Interacts with the functionalities of Django Allauth (authentication library), the NLP library, and the database in response to API calls from the frontend:
+* Sends user authentication response using Django Allauth
+* Sends game information response by accessing the database
+* Sends user information response by accessing the database
+* Processes user guesses using the NLP library and database
+
+Contributors:
+* Andrew - implemented the API paths associated with the game and user information responses and processing
+* Prasanna - implemented the API paths associated with the user authentication processing with Django Allauth
+
+### spaCy NLP Library
+Provides the capability for the application to evaluate how close semantically the user’s guess was to the article title and text
+
+Uses the spaCy NLP library (python)
+
+Interacts with the main Django REST Server:
+* Receives database data that is accessed by the main server
+* Processes the user’s guess based on its semantic closeness to the article title and text
+* Uses the results to inform the server of how the database should be updated
+
+Contributors:
+* Andrew - Implemented all functionalities related to using the spaCy library
+
+### Database and Wikipedia API
+Provides persistent storage for user authentication information, game statistics, and game state
+
+Uses SQLite with Django ORM integration
+
+Database and Wikipedia API Integration:
+* User Authentication: Django-allauth handles authentication, stored via Django ORM models
+* Game Statistics: Managed through Django models (UserProfile, DailyScore) and API views
+* Session State: GameState model persists user progress, accessed via REST APIs
+* Wikipedia Content: Fetched via service classes with wikipedia-api library cached in ArticleCache model
+* Integration Methods: Management commands, middleware, app configuration, and API endpoints
+* Test Coverage: Django TestCase for all models and utilities
+
+Contributors:
+* Xuanle: Implemented all functionalities relating to the database and using the Wikipedia API
+
