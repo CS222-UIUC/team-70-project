@@ -1,6 +1,6 @@
 # team-70-project: Wikipedle
 
-![Wikipedle](./wikipedle.png)
+![Wikipedle](./Wikipedle.png)
 
 ## What is Wikipedle?
 
