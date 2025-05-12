@@ -5,16 +5,39 @@ const VirtualKeyboard = ({ onKeyPress }) => {
   const keyboardRef = useRef(null);
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1);
+  const [isCapsLock, setIsCapsLock] = useState(false); // Add caps lock state
 
   // Add Wordle-style symbols for special keys
+  const handleKeyPress = (key) => {
+    switch (key) {
+      case 'Backspace':
+        onKeyPress('Backspace');
+        break;
+      case 'Space':
+        onKeyPress('Space');
+        break;
+      case 'Shift':
+      case 'Caps-Lck':
+        setIsCapsLock(!isCapsLock);
+        break;
+      default:
+        onKeyPress(isCapsLock ? key.toUpperCase() : key.toLowerCase());
+    }
+  };
   const getKeySymbol = (key) => {
     switch (key) {
       case 'Backspace':
-        return '←';
+        return '⌫';
       case 'Space':
-        return ' ';
+        return '␣';
+      case 'Shift':
+        return '⇧';
+      case 'Caps-Lck':
+        return '⇪';
+      case 'Enter':
+        return '↵';
       default:
-        return key.toLowerCase();
+        return key;
     }
   };
 
@@ -52,7 +75,7 @@ const VirtualKeyboard = ({ onKeyPress }) => {
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
     ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Enter"],
     ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
-    ["Ctrl", "Alt", "Space", "Alt", "Ctrl"]
+    ["Shift", "Caps-Lck", "Space", "Caps-Lck", "Shift"]
   ];
 
   return (
@@ -73,7 +96,8 @@ const VirtualKeyboard = ({ onKeyPress }) => {
                 className={`key`}
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  onKeyPress(key.toLowerCase());
+                  handleKeyPress(key);
+                  console.log(getKeySymbol(key));
                 }}
               >
                 {getKeySymbol(key)}
