@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import './Navbar.css';
 import { useAuth } from '../UseAuth';
 import axios from 'axios';
-function Navbar() {
+function Navbar({ showProfile }) {
     const { user, setUser } = useAuth();
     const navigate = useNavigate();
     const getCSRFToken = async () => {
@@ -23,6 +23,7 @@ function Navbar() {
     
             setUser(null);
             navigate('/');
+            window.location.reload(); // Refresh the page to reflect the logout
         } catch (error) {
             console.error('Logout failed:', error);
         }
@@ -32,7 +33,7 @@ function Navbar() {
             <h3 className="title">Wikipedle</h3>
             <div className="nav-links">
             <Link to="/" className="nav-link">Play</Link>
-                    {user ? (
+                    {user || showProfile ? (
                         <>
                             <Link to="/profile" className="nav-link">Profile</Link>
                             <button onClick={handleLogout} className="nav-link logout-button">Log out</button>

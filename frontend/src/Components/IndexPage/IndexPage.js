@@ -16,6 +16,7 @@ function IndexPage() {
     const [finalScore, setFinalScore] = useState("");
     const [finalTitle, setFinalTitle] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
 
     // Fetch game over status, score, and title
     useEffect(() => {
@@ -24,6 +25,7 @@ function IndexPage() {
                 console.log('Game over response:', response.data);
                 setFinalScore(response.data.score);
                 setFinalTitle(response.data.title);
+                setShowProfile(true);
 
                 if (response.data.game_over) {
                     setShowModal(true);
@@ -34,6 +36,7 @@ function IndexPage() {
                 setShowModal(false);
                 setFinalScore("");
                 setFinalTitle("");
+                setShowProfile(false);
             });
     }, []);
 
@@ -152,7 +155,7 @@ function IndexPage() {
 
     return (
         <div className = "index-page">
-            <Navbar />
+            <Navbar showProfile={showProfile} />
 
             {showModal && <Modal 
                 message1={`The Article Title Was: ${finalTitle}`} 
