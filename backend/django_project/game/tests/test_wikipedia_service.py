@@ -247,3 +247,46 @@ class WikipediaServiceTest(TestCase):
         # Should return empty list without making API call
         self.assertEqual(urls, [])
         mock_get.assert_not_called()
+
+    @patch("game.wikipedia_service.ArticleService.cache_article")
+    @patch("game.wikipedia_service.ArticleService.get_article_by_id")
+    @patch("game.wikipedia_service.WikipediaService.get_article_content")
+    @patch("game.wikipedia_service.WikipediaService.get_random_articles")
+    def test_fetch_and_cache_skips_failed_content(
+        self, mock_get_random, mock_get_content, mock_get_by_id, mock_cache_article
+    ):
+        """Test that fetch_and_cache_random_articles skips articles if get_article_content fails."""
+        mock_get_random.return_value = [
+            {"id": "1", "title": "Article One"},
+            {"id": "2", "title": "Article Two"}
+        ]
+
+        mock_get_by_id.return_value = None
+
+        mock_get_content.side_effect = [
+            None,
+            {
+                "pageid": "2", "title": "Article Two", "content": "Content for two",
+                "images": ["img2.jpg"]
+            }
+        ]
+
+        mock_cached_article_instance = MagicMock()
+        mock_cached_article_instance.title = "Article Two"
+        mock_cache_article.return_value = mock_cached_article_instance
+
+        cached_articles = WikipediaService.fetch_and_cache_random_articles(count=2)
+
+        self.assertEqual(len(cached_articles), 1)
+        self.assertEqual(cached_articles[0].title, "Article Two")
+
+        self.assertEqual(mock_get_content.call_count, 2)
+        mock_get_content.assert_any_call("1")
+        mock_get_content.assert_any_call("2")
+
+        mock_cache_article.assert_called_once_with(
+            article_id="2",
+            title="Article Two",
+            content="Content for two",
+            image_urls=["img2.jpg"],
+        )
