@@ -6,6 +6,7 @@ const VirtualKeyboard = ({ onKeyPress }) => {
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1);
   const [isCapsLock, setIsCapsLock] = useState(false); // Add caps lock state
+  const [isShift, setIsShift] = useState(false); // Add shift state
 
   // Add Wordle-style symbols for special keys
   const handleKeyPress = (key) => {
@@ -17,11 +18,14 @@ const VirtualKeyboard = ({ onKeyPress }) => {
         onKeyPress('Space');
         break;
       case 'Shift':
+        setIsShift(!isShift);
+        break;
       case 'Caps-Lck':
         setIsCapsLock(!isCapsLock);
         break;
       default:
-        onKeyPress(isCapsLock ? key.toUpperCase() : key.toLowerCase());
+        onKeyPress((isCapsLock ^ isShift) ? key.toUpperCase() : key.toLowerCase());
+        setIsShift(false);
     }
   };
   const getKeySymbol = (key) => {
